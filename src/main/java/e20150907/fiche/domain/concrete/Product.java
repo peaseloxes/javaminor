@@ -1,4 +1,4 @@
-package e20150907.fiche.domain;
+package e20150907.fiche.domain.concrete;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,5 +1,6 @@
-package e20150907.fiche.domain;
+package e20150907.fiche.domain.concrete;
 
+import e20150907.fiche.domain.abs.Discount;
 import lombok.Getter;
 import lombok.Setter;
 

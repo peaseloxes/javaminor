@@ -1,8 +1,8 @@
 package e20150907.fiche.logic;
 
-import e20150907.fiche.domain.Bill;
-import e20150907.fiche.domain.PaymentType;
-import e20150907.fiche.domain.Product;
+import e20150907.fiche.domain.concrete.Bill;
+import e20150907.fiche.domain.concrete.PaymentType;
+import e20150907.fiche.domain.concrete.Product;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,8 +24,9 @@ public class CashRegister {
     }
 
     /**
-     * Adds a product to a bill based on any identifier code;
-     * @param code
+     * Adds a product to a bill based on any identifier code.
+     *
+     * @param code one of the identifier codes
      */
     public void scan(String code){
 
@@ -51,12 +52,21 @@ public class CashRegister {
         bill.addProduct(found.get(0),1);
     }
 
-    public void paymentType(PaymentType type){
+    /**
+     * Sets the payment type to be displayed on bill.
+     *
+     * Currently only prints the type.
+     *
+     * @param type the payment type
+     */
+    public void setPaymentType(PaymentType type){
         bill.setPaymentType(type);
     }
 
+    /**
+     * Transaction done.
+     */
     public void ding(){
         bill.print();
-
     }
 }

@@ -1,11 +1,12 @@
-package e20150907.fiche.domain;
+package e20150907.fiche.domain.concrete;
 
-import e20150907.fiche.util.StringUtil;
+import e20150907.fiche.domain.abs.Discount;
+import e20150907.fiche.util.StrUtil;
 
 /**
  * Created by alex on 9/7/15.
  */
-public class DiscountVariable extends Discount{
+public class DiscountVariable extends Discount {
 
     public DiscountVariable(final long discount) {
         super(discount);
@@ -21,6 +22,6 @@ public class DiscountVariable extends Discount{
 
     @Override
     public String toString(){
-        return StringUtil.twoDecimal(super.discountValue) + "% ";
+        return StrUtil.twoDecimal(super.discountValue) + "% ";
     }
 }

@@ -1,4 +1,4 @@
-package e20150907.fiche.domain;
+package e20150907.fiche.domain.abs;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -1,4 +1,4 @@
-package e20150907.fiche.domain;
+package e20150907.fiche.domain.concrete;
 
 /**
  * Created by alex on 9/7/15.

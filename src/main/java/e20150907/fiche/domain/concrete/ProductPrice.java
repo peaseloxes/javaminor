@@ -1,6 +1,7 @@
-package e20150907.fiche.domain;
+package e20150907.fiche.domain.concrete;
 
-import e20150907.fiche.util.StringUtil;
+import e20150907.fiche.domain.abs.Discount;
+import e20150907.fiche.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,7 +37,7 @@ public class ProductPrice {
     }
     @Override
     public String toString(){
-        String s = StringUtil.twoDecimal(basePrice) + ", discount(s): ";
+        String s = StrUtil.twoDecimal(basePrice) + ", discount(s): ";
         for (Discount discount : discounts) {
             s+= discount.toString();
         }

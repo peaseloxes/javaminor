@@ -1,6 +1,6 @@
 package e20150907.fiche.main;
 
-import e20150907.fiche.domain.PaymentType;
+import e20150907.fiche.domain.concrete.PaymentType;
 import e20150907.fiche.logic.CashRegister;
 
 /**
@@ -19,7 +19,7 @@ public class Main {
         register1.scan("digit2");
         register1.scan("barcode1");
         register1.scan("barcode4");
-        register1.paymentType(PaymentType.CREDITCARD);
+        register1.setPaymentType(PaymentType.CREDITCARD);
         register1.ding();
 
     }
