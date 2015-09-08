@@ -1,5 +1,6 @@
 package e20150907.fiche.domain.concrete;
 
+import e20150907.fiche.domain.abs.Discount;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.DateTime;
@@ -14,7 +15,7 @@ import java.util.Map;
 @Setter
 public class FidelityCard {
     private String code;
-    private int discountPercentage;
+    private Discount discount;
     private Map<DateTime, Map<Product,Integer>> productHistory;
 
     public FidelityCard(){

@@ -1,13 +1,9 @@
 package e20150907.fiche.domain.concrete;
 
 import e20150907.fiche.domain.abs.Discount;
-import e20150907.fiche.util.StrUtil;
+import e20150907.fiche.domain.concrete.discounts.DiscountNone;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by alex on 9/7/15.
@@ -16,38 +12,28 @@ import java.util.List;
 @Setter
 public class ProductPrice {
     private double basePrice;
-    private List<Discount> discounts;
+    private Discount discount;
 
     public ProductPrice(double basePrice){
         this.basePrice = basePrice;
-        discounts = new ArrayList<Discount>();
     }
 
     public double calculate(){
-        double discountPrice = basePrice;
-        for(Discount discount : discounts){
-            discountPrice = discount.getDiscountOn(discountPrice);
-        }
-        return discountPrice;
+        return discount.getDiscountOn(basePrice);
     }
 
-    public ProductPrice addDiscounts(final Discount... discount){
-        Collections.addAll(discounts, discount);
-        return this;
-    }
     @Override
     public String toString(){
-        String s = StrUtil.twoDecimal(basePrice) + ", discount(s): ";
-        for (Discount discount : discounts) {
-            s+= discount.toString();
-        }
+        String s = "Discount of ";
+               s+= discount.toString();
+        s+= " each";
         return s;
     }
 
     public boolean hasDiscount(){
-        if(discounts.size() > 0){
-            return true;
+        if(discount==null || discount instanceof DiscountNone){
+            return false;
         }
-        return false;
+        return true;
     }
 }

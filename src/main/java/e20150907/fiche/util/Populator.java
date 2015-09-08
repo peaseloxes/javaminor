@@ -2,6 +2,7 @@ package e20150907.fiche.util;
 
 import e20150907.fiche.domain.concrete.*;
 import e20150907.fiche.domain.concrete.discounts.DiscountFixedAmount;
+import e20150907.fiche.domain.concrete.discounts.DiscountNone;
 import e20150907.fiche.domain.concrete.discounts.DiscountPercentage;
 import lombok.Getter;
 
@@ -50,11 +51,12 @@ public class Populator {
             if(NumUtil.fiftyfifty()){
                 // fixed discount capped on initial price
                 int basePrice = ((Number)price.getBasePrice()).intValue();
-                price.addDiscounts(new DiscountFixedAmount(NumUtil.getRandomInt(basePrice)));
-            }
-            if(NumUtil.fiftyfifty()){
+                price.setDiscount(new DiscountFixedAmount(NumUtil.getRandomInt(basePrice)));
+            }else if(NumUtil.fiftyfifty()){
                 // variable discount capped on 50 percent
-                price.addDiscounts(new DiscountPercentage(NumUtil.getRandomInt(50)));
+                price.setDiscount(new DiscountPercentage(NumUtil.getRandomInt(50)));
+            }else{
+                price.setDiscount(new DiscountNone());
             }
 
             product.setPrice(price);
@@ -77,7 +79,7 @@ public class Populator {
             fidelityCard.setCode("FC" + getUniqueRandomString());
 
             // max 50% discount
-            fidelityCard.setDiscountPercentage(NumUtil.getRandomInt(50));
+            fidelityCard.setDiscount(new DiscountPercentage(NumUtil.getRandomInt(50)));
 
             customer.setCard(fidelityCard);
 

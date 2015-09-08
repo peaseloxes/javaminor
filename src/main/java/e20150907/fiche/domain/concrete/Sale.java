@@ -21,6 +21,7 @@ public class Sale {
         customerList = ProductFactory.getCustomerList();
         bill = new Bill();
     }
+
     public boolean handleCode(final String code){
         if(handleProductCode(code)){
             return true;

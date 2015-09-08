@@ -45,7 +45,7 @@ public class Product {
      * @param discount the discount in absolute value
      */
     public void addCustomDiscount(double discount){
-        price.addDiscounts(new DiscountFixedAmount(discount));
+        price.setDiscount(new DiscountFixedAmount(discount));
     }
 
     @Override

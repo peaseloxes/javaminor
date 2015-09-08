@@ -1,5 +1,7 @@
 package e20150907.fiche.domain.concrete;
 
+import e20150907.fiche.domain.abs.Discount;
+import e20150907.fiche.domain.concrete.discounts.DiscountFixedAmount;
 import e20150907.fiche.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +23,7 @@ public class Bill {
     private Map<Product, Integer> productsMap;
 
     private Customer customer;
+    private Discount discount = new DiscountFixedAmount(100);
 
     public Bill(){
         productsMap = new HashMap<Product, Integer>();
@@ -70,16 +73,23 @@ public class Bill {
 
             logger.info(" ");
         }
-        logger.info("==============================");
+        logger.info("=========================================");
         logger.info("Subtotal: " + StrUtil.twoDecimal(totalBasePrice));
-        logger.info("Total Discount: " + StrUtil.twoDecimal(totalBasePrice - totalPrice));
-        if(customer.getCard().getDiscountPercentage()!=0){
-            logger.info("Customer Discount: " + customer.getCard().getDiscountPercentage() + "% over " + totalPrice);
-            totalPrice = totalPrice * (100-customer.getCard().getDiscountPercentage()) / 100;
+        logger.info("Total Item Discount: " + StrUtil.twoDecimal(totalBasePrice - totalPrice));
+        logger.info("Subtotal: " + StrUtil.twoDecimal(totalPrice));
+        if(discount!=null){
+            totalPrice = discount.getDiscountOn(totalPrice);
+            logger.info("Total End Discount: " + StrUtil.twoDecimal(discount.getDiscountValue()));
+            logger.info("Subtotal: " + StrUtil.twoDecimal(totalPrice));
+        }
+
+        if(customer.getCard().getDiscount().getDiscountOn(totalPrice)!=0){
+            logger.info("Customer Discount: " + customer.getCard().getDiscount().getDiscountValue() + "% over " + StrUtil.twoDecimal(totalPrice));
+            totalPrice = customer.getCard().getDiscount().getDiscountOn(totalPrice);
         }
         logger.info("Total Price: " + StrUtil.twoDecimal(totalPrice));
 
-        customer.getCard().addProductsToHistory(DateTime.now(),productsMap);
+        customer.getCard().addProductsToHistory(DateTime.now(), productsMap);
     }
 
 }
