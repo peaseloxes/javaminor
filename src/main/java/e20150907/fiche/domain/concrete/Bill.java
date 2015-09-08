@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +20,7 @@ public class Bill {
     private PaymentType paymentType;
     private Map<Product, Integer> productsMap;
 
-    // TODO more generic?
-    private int customerDiscountPercentage = 0;
+    private Customer customer;
 
     public Bill(){
         productsMap = new HashMap<Product, Integer>();
@@ -73,11 +73,13 @@ public class Bill {
         logger.info("==============================");
         logger.info("Subtotal: " + StrUtil.twoDecimal(totalBasePrice));
         logger.info("Total Discount: " + StrUtil.twoDecimal(totalBasePrice - totalPrice));
-        if(customerDiscountPercentage!=0){
-            logger.info("Customer Discount: " + customerDiscountPercentage + "% over " + totalPrice);
-            totalPrice = totalPrice * (100-customerDiscountPercentage) / 100;
+        if(customer.getCard().getDiscountPercentage()!=0){
+            logger.info("Customer Discount: " + customer.getCard().getDiscountPercentage() + "% over " + totalPrice);
+            totalPrice = totalPrice * (100-customer.getCard().getDiscountPercentage()) / 100;
         }
         logger.info("Total Price: " + StrUtil.twoDecimal(totalPrice));
+
+        customer.getCard().addProductsToHistory(DateTime.now(),productsMap);
     }
 
 }

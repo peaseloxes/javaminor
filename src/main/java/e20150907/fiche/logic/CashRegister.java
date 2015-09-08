@@ -52,8 +52,7 @@ public class CashRegister {
     public boolean handleFidelityCard(final String code){
         for (Customer customer : customerList) {
             if(customer.getCard().codeMatches(code)){
-                bill.setCustomerDiscountPercentage(customer.getCard().getDiscountPercentage());
-
+                bill.setCustomer(customer);
                 // only one customer possible, so return to inform caller the customer was found
                 return true;
             }
