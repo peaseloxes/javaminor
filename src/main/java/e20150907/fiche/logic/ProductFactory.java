@@ -10,15 +10,23 @@ import java.util.List;
  */
 public class ProductFactory {
     private static List<Product> productList;
+    private static List<Customer> customerList;
 
     static{
         productList = new ArrayList<Product>();
+        customerList = new ArrayList<Customer>();
     }
 
     public static List<Product> getProductList(){
         return productList;
     }
 
+    public static List<Customer> getCustomerList() {
+        return customerList;
+    }
+
+
+    // TODO move below to proper populator
 
     /**
      * Generates dummy data to be used by the application.
@@ -51,20 +59,16 @@ public class ProductFactory {
                 .addCode("customcode", "customcode3")
                 .addCode("digitcode", "digit3");
 
-        // eerst tien eraf, dan 15% korting over restant
         ProductPrice pr3 = new ProductPrice(130.99).addDiscounts(new DiscountFixed(10),new DiscountVariable(15));
         p3.setIdentifier(id3);
         p3.setPrice(pr3);
 
-        // heeft geen custom code label
         Product p4 = new Product();
         p4.setName("Coffeemaker");
         ProductID id4 = new ProductID()
                 .addCode("barcode", "barcode4")
-                //.addCode("customcode","customcode4")
                 .addCode("digitcode","digit4");
 
-        // geen korting
         ProductPrice pr4 = new ProductPrice(21.55);
         p4.setIdentifier(id4);
         p4.setPrice(pr4);
@@ -74,4 +78,19 @@ public class ProductFactory {
         productList.add(p3);
         productList.add(p4);
     }
+
+    public static void generateDummyCustomers(){
+        Customer c1 = new Customer();
+        c1.setId(1);
+        c1.setName("C. Ustomer");
+
+        FidelityCard f1 = new FidelityCard();
+        f1.setCode("customer1");
+        f1.setDiscountPercentage(10);
+        c1.setCard(f1);
+
+        customerList.add(c1);
+    }
+
+
 }

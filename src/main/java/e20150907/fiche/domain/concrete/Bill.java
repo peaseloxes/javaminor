@@ -19,6 +19,9 @@ public class Bill {
     private PaymentType paymentType;
     private Map<Product, Integer> productsMap;
 
+    // TODO more generic?
+    private int customerDiscountPercentage = 0;
+
     public Bill(){
         productsMap = new HashMap<Product, Integer>();
     }
@@ -70,6 +73,10 @@ public class Bill {
         logger.info("==============================");
         logger.info("Subtotal: " + StrUtil.twoDecimal(totalBasePrice));
         logger.info("Total Discount: " + StrUtil.twoDecimal(totalBasePrice - totalPrice));
+        if(customerDiscountPercentage!=0){
+            logger.info("Customer Discount: " + customerDiscountPercentage + "% over " + totalPrice);
+            totalPrice = totalPrice * (100-customerDiscountPercentage) / 100;
+        }
         logger.info("Total Price: " + StrUtil.twoDecimal(totalPrice));
     }
 
