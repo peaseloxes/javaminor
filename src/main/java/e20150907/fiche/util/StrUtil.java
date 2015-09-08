@@ -1,7 +1,9 @@
 package e20150907.fiche.util;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.Random;
 
 /**
  * Created by alex on 9/7/15.
@@ -18,5 +20,10 @@ public class StrUtil {
         BigDecimal d = new BigDecimal(n.doubleValue());
         d = d.setScale(2, RoundingMode.HALF_UP);
         return String.valueOf(d);
+    }
+
+    public static String randomString(final int length){
+        Random random = new Random();
+        return new BigInteger(length, random).toString(32);
     }
 }

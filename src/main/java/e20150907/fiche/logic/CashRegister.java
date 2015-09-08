@@ -20,8 +20,6 @@ public class CashRegister {
     private List<Customer> customerList;
 
     public CashRegister(){
-        ProductFactory.generateDummyProducts();
-        ProductFactory.generateDummyCustomers();
         productList = ProductFactory.getProductList();
         customerList = ProductFactory.getCustomerList();
         bill = new Bill();
@@ -112,7 +110,7 @@ public class CashRegister {
      *
      * @param type the payment type
      */
-    public void setPaymentType(PaymentType type){
+    public void setPaymentType(final PaymentType type){
         bill.setPaymentType(type);
     }
 
