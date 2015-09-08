@@ -1,5 +1,6 @@
 package e20150907.fiche.domain.concrete;
 
+import e20150907.fiche.domain.concrete.discounts.DiscountFixedAmount;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,7 +45,7 @@ public class Product {
      * @param discount the discount in absolute value
      */
     public void addCustomDiscount(double discount){
-        price.addDiscounts(new DiscountFixed(discount));
+        price.addDiscounts(new DiscountFixedAmount(discount));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package e20150907.fiche.domain.concrete;
+package e20150907.fiche.domain.concrete.discounts;
 
 import e20150907.fiche.domain.abs.Discount;
 import e20150907.fiche.util.StrUtil;
@@ -6,9 +6,9 @@ import e20150907.fiche.util.StrUtil;
 /**
  * Created by alex on 9/7/15.
  */
-public class DiscountVariable extends Discount {
+public class DiscountPercentage extends Discount {
 
-    public DiscountVariable(final long discount) {
+    public DiscountPercentage(final long discount) {
         super(discount);
         if(discount > 100){
             log.info("Discount is more than 100%!");

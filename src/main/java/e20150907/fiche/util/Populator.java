@@ -1,6 +1,8 @@
 package e20150907.fiche.util;
 
 import e20150907.fiche.domain.concrete.*;
+import e20150907.fiche.domain.concrete.discounts.DiscountFixedAmount;
+import e20150907.fiche.domain.concrete.discounts.DiscountPercentage;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -48,11 +50,11 @@ public class Populator {
             if(NumUtil.fiftyfifty()){
                 // fixed discount capped on initial price
                 int basePrice = ((Number)price.getBasePrice()).intValue();
-                price.addDiscounts(new DiscountFixed(NumUtil.getRandomInt(basePrice)));
+                price.addDiscounts(new DiscountFixedAmount(NumUtil.getRandomInt(basePrice)));
             }
             if(NumUtil.fiftyfifty()){
                 // variable discount capped on 50 percent
-                price.addDiscounts(new DiscountVariable(NumUtil.getRandomInt(50)));
+                price.addDiscounts(new DiscountPercentage(NumUtil.getRandomInt(50)));
             }
 
             product.setPrice(price);

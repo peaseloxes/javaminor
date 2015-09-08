@@ -1,4 +1,4 @@
-package e20150907.fiche.domain.concrete;
+package e20150907.fiche.domain.concrete.discounts;
 
 import e20150907.fiche.domain.abs.Discount;
 import lombok.Getter;
@@ -9,10 +9,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class DiscountFixed extends Discount {
+public class DiscountFixedAmount extends Discount {
 
 
-    public DiscountFixed(double discount) {
+    public DiscountFixedAmount(double discount) {
         super(discount);
     }
 
