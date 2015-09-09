@@ -1,7 +1,7 @@
 package e20150907.fiche.logic;
 
-import e20150907.fiche.domain.concrete.Customer;
-import e20150907.fiche.domain.concrete.Product;
+import e20150907.fiche.domain.concrete.scanitems.Customer;
+import e20150907.fiche.domain.concrete.scanitems.Product;
 import e20150907.fiche.util.Populator;
 
 import java.util.List;
@@ -17,8 +17,8 @@ public class ProductFactory {
     static{
         populator = new Populator();
         populator.populate();
-        productList = populator.getProductList();
-        customerList = populator.getCustomerList();
+        //productList = populator.getProductList();
+        //customerList = populator.getCustomerList();
     }
 
     public static List<Product> getProductList(){

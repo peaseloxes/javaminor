@@ -1,6 +1,5 @@
 package e20150907.fiche.logic;
 
-import e20150907.fiche.domain.concrete.PaymentType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,18 +25,6 @@ public class CashRegister {
         sale.handleCode(code);
     }
 
-
-
-    /**
-     * Sets the payment type to be displayed on bill.
-     *
-     * Currently only prints the type.
-     *
-     * @param type the payment type
-     */
-    public void setPaymentType(final PaymentType type){
-        sale.setPaymentType(type);
-    }
 
     /**
      * Transaction done, print bill and create a new one.

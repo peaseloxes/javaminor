@@ -2,12 +2,12 @@ package e20150907.fiche.domain.concrete;
 
 import e20150907.fiche.domain.abs.Discount;
 import e20150907.fiche.domain.concrete.discounts.DiscountFixedAmount;
-import e20150907.fiche.util.StrUtil;
+import e20150907.fiche.domain.concrete.scanitems.Customer;
+import e20150907.fiche.domain.concrete.scanitems.Product;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.joda.time.DateTime;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,6 @@ import java.util.Map;
 @Setter
 public class Bill {
     private Logger logger = LogManager.getLogger(Bill.class.getName());
-    private PaymentType paymentType;
     private Map<Product, Integer> productsMap;
 
     private Customer customer;
@@ -50,50 +49,7 @@ public class Bill {
 
         // TODO fix horror below
 
-        double totalPrice = 0;
-        double totalBasePrice = 0;
 
-        logger.info("Payment type: " + paymentType);
-        logger.info(" ");
-
-        for (Map.Entry<Product, Integer> pair : productsMap.entrySet()){
-            double basePrice = pair.getKey().getBasePrice();
-
-            int amount = pair.getValue();
-            double endPrice = pair.getKey().getPrice(amount);
-            totalPrice += endPrice;
-            totalBasePrice += basePrice * amount;
-
-            logger.info(pair.getKey().getName() + " x " +amount + " @ "
-                    + StrUtil.twoDecimal(basePrice) + " = "
-                    + StrUtil.twoDecimal(basePrice));
-
-            if(pair.getKey().hasDiscount()){
-                logger.info("DISCOUNT: " + pair.getKey().getDiscountString());
-                logger.info("NEW PRICE: " + amount + " x " +
-                        StrUtil.twoDecimal(endPrice) + " = " +
-                        StrUtil.twoDecimal(endPrice));
-            }
-
-            logger.info(" ");
-        }
-        logger.info("=========================================");
-        logger.info("Subtotal: " + StrUtil.twoDecimal(totalBasePrice));
-        logger.info("Total Item Discount: " + StrUtil.twoDecimal(totalBasePrice - totalPrice));
-        logger.info("Subtotal: " + StrUtil.twoDecimal(totalPrice));
-        if(discount!=null){
-            totalPrice = discount.getDiscountOn(totalPrice, 1);
-            logger.info("Total End Discount: " + StrUtil.twoDecimal(discount.getDiscountValue()));
-            logger.info("Subtotal: " + StrUtil.twoDecimal(totalPrice));
-        }
-
-        if(customer.getCard().getDiscount().getDiscountOn(totalPrice, 1)!=0){
-            logger.info("Customer Discount: " + customer.getCard().getDiscount().getDiscountValue() + "% over " + StrUtil.twoDecimal(totalPrice));
-            totalPrice = customer.getCard().getDiscount().getDiscountOn(totalPrice, 1);
-        }
-        logger.info("Total Price: " + StrUtil.twoDecimal(totalPrice));
-
-        customer.getCard().addProductsToHistory(DateTime.now(), productsMap);
     }
 
 }

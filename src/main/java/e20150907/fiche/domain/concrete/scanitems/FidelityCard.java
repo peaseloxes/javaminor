@@ -1,6 +1,7 @@
-package e20150907.fiche.domain.concrete;
+package e20150907.fiche.domain.concrete.scanitems;
 
 import e20150907.fiche.domain.abs.Discount;
+import e20150907.fiche.domain.abs.ScanItem;
 import lombok.Getter;
 import lombok.Setter;
 import org.joda.time.DateTime;
@@ -13,9 +14,10 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class FidelityCard {
+public class FidelityCard extends ScanItem{
     private String code;
     private Discount discount;
+    private Customer customer;
     private Map<DateTime, Map<Product,Integer>> productHistory;
 
     public FidelityCard(){

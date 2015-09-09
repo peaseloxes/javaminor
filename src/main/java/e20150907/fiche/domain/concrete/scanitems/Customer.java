@@ -1,4 +1,4 @@
-package e20150907.fiche.domain.concrete;
+package e20150907.fiche.domain.concrete.scanitems;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,5 +11,4 @@ import lombok.Setter;
 public class Customer {
     private long id;
     private String name;
-    private FidelityCard card;
 }
