@@ -17,7 +17,7 @@ public class DiscountFixedAmount extends Discount {
     }
 
     @Override
-    public double getDiscountOn(final double price) {
+    public double getDiscountOn(final double price, int amount) {
         if(super.discountValue > price){
             log.info("Discount is larger than total price!");
         }
@@ -26,6 +26,6 @@ public class DiscountFixedAmount extends Discount {
 
     @Override
     public String toString(){
-        return String.valueOf(super.discountValue) + " ";
+        return String.valueOf(super.discountValue) + " each";
     }
 }

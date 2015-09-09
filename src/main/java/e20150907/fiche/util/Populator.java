@@ -3,6 +3,7 @@ package e20150907.fiche.util;
 import e20150907.fiche.domain.concrete.*;
 import e20150907.fiche.domain.concrete.discounts.DiscountFixedAmount;
 import e20150907.fiche.domain.concrete.discounts.DiscountNone;
+import e20150907.fiche.domain.concrete.discounts.DiscountOnAmount;
 import e20150907.fiche.domain.concrete.discounts.DiscountPercentage;
 import lombok.Getter;
 
@@ -55,7 +56,10 @@ public class Populator {
             }else if(NumUtil.fiftyfifty()){
                 // variable discount capped on 50 percent
                 price.setDiscount(new DiscountPercentage(NumUtil.getRandomInt(50)));
-            }else{
+            }else if(NumUtil.fiftyfifty()) {
+                // buy x get y free discount
+                price.setDiscount(new DiscountOnAmount(NumUtil.getRandomInt(10)+1,NumUtil.getRandomInt(2)+1));
+            }else {
                 price.setDiscount(new DiscountNone());
             }
 

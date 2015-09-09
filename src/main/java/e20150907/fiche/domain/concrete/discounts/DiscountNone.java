@@ -12,7 +12,7 @@ public class DiscountNone extends Discount{
     }
 
     @Override
-    public double getDiscountOn(double price) {
+    public double getDiscountOn(double price, int amount) {
         return price;
     }
 

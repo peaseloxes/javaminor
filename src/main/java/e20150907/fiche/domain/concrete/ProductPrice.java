@@ -18,15 +18,14 @@ public class ProductPrice {
         this.basePrice = basePrice;
     }
 
-    public double calculate(){
-        return discount.getDiscountOn(basePrice);
+    public double calculate(final int amount){
+        return discount.getDiscountOn(basePrice, amount);
     }
 
     @Override
     public String toString(){
         String s = "Discount of ";
                s+= discount.toString();
-        s+= " each";
         return s;
     }
 

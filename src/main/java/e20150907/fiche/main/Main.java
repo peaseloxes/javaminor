@@ -59,10 +59,15 @@ public class Main {
 
         register1 = new CashRegister();
 
-        // three product 1's
+        // eight product 1's
         register1.scan(randomProducts.get(1).getIdentifier().getCodes().get("barcode"));
         register1.scan(randomProducts.get(1).getIdentifier().getCodes().get("customcode"));
         register1.scan(randomProducts.get(1).getIdentifier().getCodes().get("digitcode"));
+        register1.scan(randomProducts.get(1).getIdentifier().getCodes().get("barcode"));
+        register1.scan(randomProducts.get(1).getIdentifier().getCodes().get("customcode"));
+        register1.scan(randomProducts.get(1).getIdentifier().getCodes().get("digitcode"));
+        register1.scan(randomProducts.get(1).getIdentifier().getCodes().get("barcode"));
+        register1.scan(randomProducts.get(1).getIdentifier().getCodes().get("customcode"));
 
         // product with a custom code
         register1.scan(randomProducts.get(2).getIdentifier().getCodes().get("customcode"));

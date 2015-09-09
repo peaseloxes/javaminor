@@ -47,6 +47,9 @@ public class Bill {
      * Print the bill to the logger.
      */
     public void print(){
+
+        // TODO fix horror below
+
         double totalPrice = 0;
         double totalBasePrice = 0;
 
@@ -55,20 +58,21 @@ public class Bill {
 
         for (Map.Entry<Product, Integer> pair : productsMap.entrySet()){
             double basePrice = pair.getKey().getBasePrice();
-            double endPrice = pair.getKey().getPrice();
+
             int amount = pair.getValue();
-            totalPrice += endPrice * amount;
+            double endPrice = pair.getKey().getPrice(amount);
+            totalPrice += endPrice;
             totalBasePrice += basePrice * amount;
 
             logger.info(pair.getKey().getName() + " x " +amount + " @ "
                     + StrUtil.twoDecimal(basePrice) + " = "
-                    + StrUtil.twoDecimal(basePrice * amount));
+                    + StrUtil.twoDecimal(basePrice));
 
             if(pair.getKey().hasDiscount()){
                 logger.info("DISCOUNT: " + pair.getKey().getDiscountString());
                 logger.info("NEW PRICE: " + amount + " x " +
                         StrUtil.twoDecimal(endPrice) + " = " +
-                        StrUtil.twoDecimal(endPrice * amount));
+                        StrUtil.twoDecimal(endPrice));
             }
 
             logger.info(" ");
@@ -78,14 +82,14 @@ public class Bill {
         logger.info("Total Item Discount: " + StrUtil.twoDecimal(totalBasePrice - totalPrice));
         logger.info("Subtotal: " + StrUtil.twoDecimal(totalPrice));
         if(discount!=null){
-            totalPrice = discount.getDiscountOn(totalPrice);
+            totalPrice = discount.getDiscountOn(totalPrice, 1);
             logger.info("Total End Discount: " + StrUtil.twoDecimal(discount.getDiscountValue()));
             logger.info("Subtotal: " + StrUtil.twoDecimal(totalPrice));
         }
 
-        if(customer.getCard().getDiscount().getDiscountOn(totalPrice)!=0){
+        if(customer.getCard().getDiscount().getDiscountOn(totalPrice, 1)!=0){
             logger.info("Customer Discount: " + customer.getCard().getDiscount().getDiscountValue() + "% over " + StrUtil.twoDecimal(totalPrice));
-            totalPrice = customer.getCard().getDiscount().getDiscountOn(totalPrice);
+            totalPrice = customer.getCard().getDiscount().getDiscountOn(totalPrice, 1);
         }
         logger.info("Total Price: " + StrUtil.twoDecimal(totalPrice));
 

@@ -30,9 +30,10 @@ public class Product {
      * Easy retrieval method for price.
      *
      * @return product price, including discounts etc.
+     * @param amount
      */
-    public double getPrice(){
-        return price.calculate();
+    public double getPrice(final int amount){
+        return price.calculate(amount);
     }
 
     public double getBasePrice(){

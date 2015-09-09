@@ -14,6 +14,6 @@ public abstract class Discount {
     public Discount(double discount){
         this.discountValue = discount;
     }
-    public abstract double getDiscountOn(final double price);
+    public abstract double getDiscountOn(final double price, int amount);
 
 }
