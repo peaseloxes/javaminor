@@ -86,8 +86,12 @@ public class Main {
         // one last product, 4
         register1.scan(randomProducts.get(4).getCodeByType("barcode"));
 
+
+
         // do the finishing up
         register1.ding();
+
+        register1.payWithTypeCoupon("ECO",100);
 
         // prove items were saved
         //logger.info(randomFidelityCard.getProductHistory().size() + " purchase(s) made by this customer!");

@@ -1,5 +1,6 @@
 package e20150907.fiche.logic;
 
+import e20150907.fiche.domain.abs.PaymentItem;
 import e20150907.fiche.domain.abs.ScanItem;
 import e20150907.fiche.domain.concrete.Basket;
 import e20150907.fiche.domain.concrete.Bill;
@@ -19,19 +20,25 @@ public class Sale {
     private ScanItemRepository repository;
 
     private double totalPrice;
+    private double totalRemaining;
 
     // TODO make dynamic, properties file etc.
     private String categoryPricingName = "Type";
     private String[] pricingCategories = new String[]{"ECO","Meal"};
 
     private List<Double> totalPricesCategories;
+    private List<Double> totalPricesCategoriesRemaining;
+
+
 
     public Sale(){
         repository = new ScanItemRepository();
         bill = new Bill();
         basket = new Basket();
         totalPrice = 0;
+        totalRemaining = 0;
         totalPricesCategories = new ArrayList<Double>();
+        totalPricesCategoriesRemaining = new ArrayList<Double>();
     }
 
     public boolean handleCode(final String code){
@@ -55,9 +62,41 @@ public class Sale {
 
     private void calculateBasketContents(){
         totalPrice = basket.calculateTotalPrice();
+        totalRemaining += totalPrice;
         for (String pricingCategory : pricingCategories) {
-            totalPricesCategories.add(basket.calculatePriceForItemsWithProperty(categoryPricingName,pricingCategory));
+            double r = basket.calculatePriceForItemsWithProperty(categoryPricingName, pricingCategory);
+            totalPricesCategories.add(r);
+            totalPricesCategoriesRemaining.add(r);
         }
     }
 
+    public void handlePayment(final PaymentItem item) {
+
+        // if item has a type requirement
+        if (item.hasType()){
+
+            // loop through all known types and associated prices
+            for (int i = 0; i < totalPricesCategories.size(); i++) {
+
+                // if one of the type matches type of payment item
+                if(pricingCategories[i].equals(item.getType())){
+                    // and the amount is above 0
+                    if(totalPricesCategories.get(i)>0){
+                        double remainder = item.remainder(totalPricesCategories.get(i));
+                        totalPricesCategoriesRemaining.add(i, remainder);
+
+                        // TODO not quite right yet
+                        totalRemaining -= remainder;
+                        logger.info("Paid " + item.getAmount() + " with a " + item.getType() + " coupon");
+                        logger.info(totalPricesCategoriesRemaining.get(i) + " of " + item.getType() + " remaining");
+                        logger.info(totalRemaining + " in total remaining");
+                    }
+
+
+                }
+            }
+        }
+        // else total price
+        totalRemaining -= item.remainder(totalPrice);
+    }
 }

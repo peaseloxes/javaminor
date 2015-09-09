@@ -1,5 +1,6 @@
 package e20150907.fiche.logic;
 
+import e20150907.fiche.domain.concrete.paymentitems.TypeCoupon;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +32,16 @@ public class CashRegister {
         logger.info("Scanned code: "+ code);
     }
 
+
+    // button on register
+    public void payWithTypeCoupon(final String type, final double amount){
+        sale.handlePayment(new TypeCoupon(type,amount));
+    }
+
+    // button on register
+    public void payWithCash(final double amount){
+
+    }
 
     /**
      * Transaction done, print bill and create a new one.
