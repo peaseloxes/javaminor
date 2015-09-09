@@ -33,7 +33,7 @@ public class Populator {
         randomStrings  = new ArrayList<String>();
         scanItemsList = new ArrayList<ScanItem>();
         fidelityCardList = new ArrayList<ScanItem>();
-        generateDummyProducts(15);
+        generateDummyProducts(20);
         generateDummyCustomers(5);
     }
 
@@ -77,6 +77,13 @@ public class Populator {
                 product.setDiscount(new DiscountNone());
             }
 
+            if(NumUtil.oneInTen()){
+                product.addProperties("Type", "ECO");
+            }else if(NumUtil.oneInTen()) {
+                product.addProperties("Type","Meal");
+            }
+            // otherwise no type property
+            // application should handle the missing property correctly
             scanItemsList.add(product);
         }
     }

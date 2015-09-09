@@ -11,6 +11,11 @@ public class CashRegister {
     private Sale sale;
 
     public CashRegister(){
+
+    }
+
+    // TODO possibly warn if previous sale hasn't finished properly yet?
+    public void startNewSale(){
         sale = new Sale();
     }
 
@@ -23,6 +28,7 @@ public class CashRegister {
      */
     public void scan(final String code){
         sale.handleCode(code);
+        logger.info("Scanned code: "+ code);
     }
 
 

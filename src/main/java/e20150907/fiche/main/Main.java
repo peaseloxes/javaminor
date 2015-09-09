@@ -22,6 +22,8 @@ public class Main {
 
         CashRegister register1 = new CashRegister();
 
+        register1.startNewSale();
+
         // three product 1's
         register1.scan(randomProducts.get(1).getCodeByType("barcode"));
         register1.scan(randomProducts.get(1).getCodeByType("barcode"));
@@ -39,6 +41,9 @@ public class Main {
         // scanned a fidelity card (10% discount)
         register1.scan(randomFidelityCard.getCodeByType("cardcode"));
 
+
+        assert(randomProducts.size()>5);
+        //TODO index out of bounds sometimes?
         // one last product, 4
         register1.scan(randomProducts.get(4).getCodeByType("barcode"));
 
@@ -54,7 +59,7 @@ public class Main {
 
         // same customer going for another round
 
-        register1 = new CashRegister();
+        register1.startNewSale();
 
         // eight product 1's
         register1.scan(randomProducts.get(1).getCodeByType("barcode"));

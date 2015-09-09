@@ -23,4 +23,12 @@ public class NumUtil {
         Random r = new Random();
         return r.nextBoolean();
     }
+
+    public static boolean oneInTen(){
+        Random r = new Random();
+        if(r.nextDouble() < 0.11){
+            return true;
+        }
+        return false;
+    }
 }
