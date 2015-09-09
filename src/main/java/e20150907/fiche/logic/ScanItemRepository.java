@@ -15,7 +15,9 @@ public class ScanItemRepository {
     private static Logger logger = LogManager.getLogger(ScanItemRepository.class.getName());
     private List<ScanItem> scanItems;
     public ScanItemRepository(){
-        Populator populator = new Populator();
+
+        // TODO replace when database has been implemented
+        Populator populator = ProductFactory.getPopulator();
         scanItems = populator.getAllScanItems();
     }
 

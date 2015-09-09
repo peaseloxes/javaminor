@@ -15,6 +15,8 @@ public class ProductFactory {
     private static Populator populator;
 
     static{
+
+        // TODO replace when database has been implemented
         populator = new Populator();
         populator.populate();
         //productList = populator.getProductList();
