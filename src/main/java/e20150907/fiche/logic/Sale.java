@@ -1,6 +1,9 @@
-package e20150907.fiche.domain.concrete;
+package e20150907.fiche.logic;
 
-import e20150907.fiche.logic.ProductFactory;
+import e20150907.fiche.domain.concrete.Bill;
+import e20150907.fiche.domain.concrete.Customer;
+import e20150907.fiche.domain.concrete.PaymentType;
+import e20150907.fiche.domain.concrete.Product;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -71,9 +74,7 @@ public class Sale {
         if(found.size() > 1){
             logger.error("More than one product matches an id for " + code);
             logger.error("Product was not added.");
-            for (Product product : found) {
-                logger.error(product);
-            }
+            found.forEach(logger::error);
 
             // nothing can be done, return false to inform caller nothing happened
             return false;
@@ -92,7 +93,7 @@ public class Sale {
         return true;
     }
 
-    public void finalize(){
+    public void finish(){
         bill.print();
         bill = new Bill();
     }

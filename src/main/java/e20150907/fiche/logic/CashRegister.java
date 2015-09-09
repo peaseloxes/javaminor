@@ -1,7 +1,6 @@
 package e20150907.fiche.logic;
 
 import e20150907.fiche.domain.concrete.PaymentType;
-import e20150907.fiche.domain.concrete.Sale;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,6 +43,6 @@ public class CashRegister {
      * Transaction done, print bill and create a new one.
      */
     public void ding(){
-        sale.finalize();
+        sale.finish();
     }
 }
