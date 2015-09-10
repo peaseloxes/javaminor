@@ -4,6 +4,7 @@ import e20150907.fiche.domain.abs.PaymentItem;
 import e20150907.fiche.domain.abs.ScanItem;
 import e20150907.fiche.domain.concrete.Basket;
 import e20150907.fiche.domain.concrete.Bill;
+import e20150907.fiche.util.PreferenceUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +25,7 @@ public class Sale {
 
     // TODO make dynamic, properties file etc.
     private String categoryPricingName = "Type";
-    private String[] pricingCategories = new String[]{"ECO","Meal"};
+    private String[] pricingCategories = PreferenceUtil.getPricingCategories();
 
     private List<Double> totalPricesCategories;
     private List<Double> totalPricesCategoriesRemaining;
@@ -86,7 +87,12 @@ public class Sale {
                         totalPricesCategoriesRemaining.add(i, remainder);
 
                         // TODO not quite right yet
-                        totalRemaining -= remainder;
+                        if(totalPricesCategories.get(i) > item.getAmount()){
+                            totalRemaining -= item.getAmount();
+                        }else{
+                            totalRemaining -= (totalPricesCategories.get(i));
+                        }
+
                         logger.info("Paid " + item.getAmount() + " with a " + item.getType() + " coupon");
                         logger.info(totalPricesCategoriesRemaining.get(i) + " of " + item.getType() + " remaining");
                         logger.info(totalRemaining + " in total remaining");
@@ -95,8 +101,21 @@ public class Sale {
 
                 }
             }
+        }else{
+            // else total price
+            totalRemaining -= item.remainder(totalPrice);
         }
-        // else total price
-        totalRemaining -= item.remainder(totalPrice);
+
     }
+
+//    public void handlePayment(final PaymentItem item){
+//
+//        // if it's an item with a type
+//        if (item.hasType()){
+//
+//        }
+//
+//        // else, handle as amount
+//        totalRemaining = totalRemaining - item.getAmount();
+//    }
 }

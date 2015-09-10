@@ -63,26 +63,27 @@ public class Populator {
             product.setPrice(NumUtil.getRandomDouble(500));
 
 
-            if(NumUtil.fiftyfifty()){
+            if(NumUtil.oneInTen()){
                 // fixed discount capped on initial price
                 int basePrice = ((Number)product.getPrice()).intValue();
                 product.setDiscount(new DiscountFixedAmount(NumUtil.getRandomInt(basePrice)));
-            }else if(NumUtil.fiftyfifty()){
+            }else if(NumUtil.oneInTen()){
                 // variable discount capped on 50 percent
                 product.setDiscount(new DiscountPercentage(NumUtil.getRandomInt(50)));
-            }else if(NumUtil.fiftyfifty()) {
+            }else if(NumUtil.oneInTen()) {
                 // buy x get y free discount
                 product.setDiscount(new DiscountOnAmount(NumUtil.getRandomInt(10)+1,NumUtil.getRandomInt(2)+1));
             }else {
                 product.setDiscount(new DiscountNone());
             }
 
-            if(NumUtil.oneInTen()){
-                product.addProperties("Type", "ECO");
-            }else if(NumUtil.oneInTen()) {
-                product.addProperties("Type","Meal");
+            if(NumUtil.fiftyfifty()){
+                String randomType = PreferenceUtil.getPricingCategories()[NumUtil.getRandomInt(PreferenceUtil.getPricingCategories().length)];
+                product.addProperties("Type", randomType);
+            }else {
+                // otherwise no type property
             }
-            // otherwise no type property
+
             // application should handle the missing property correctly
             scanItemsList.add(product);
         }

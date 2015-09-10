@@ -1,8 +1,11 @@
 package e20150907.fiche.main;
 
 import e20150907.fiche.domain.abs.ScanItem;
-import e20150907.fiche.logic.CashRegister;
+import e20150907.fiche.logic.CashRegisterImpl;
 import e20150907.fiche.logic.ProductFactory;
+import e20150907.fiche.logic.abs.CashRegister;
+import e20150907.fiche.util.NumUtil;
+import e20150907.fiche.util.PreferenceUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +23,7 @@ public class Main {
         List<ScanItem> randomProducts = ProductFactory.getPopulator().getRandomSelectionFromProductList(10);
         ScanItem randomFidelityCard = ProductFactory.getPopulator().getRandomFidelityCard();
 
-        CashRegister register1 = new CashRegister();
+        CashRegister register1 = new CashRegisterImpl();
 
         register1.startNewSale();
 
@@ -49,7 +52,7 @@ public class Main {
 
 
         // do the finishing up
-        register1.ding();
+        register1.finishUpSale();
 
         // prove items were saved
         //logger.info(randomFidelityCard.getProductHistory().size() + " purchase(s) made by this customer!");
@@ -89,9 +92,9 @@ public class Main {
 
 
         // do the finishing up
-        register1.ding();
+        register1.finishUpSale();
 
-        register1.payWithTypeCoupon("ECO",100);
+        register1.payWithTypeCoupon(PreferenceUtil.getPricingCategories()[NumUtil.getRandomInt(PreferenceUtil.getPricingCategories().length)], 100);
 
         // prove items were saved
         //logger.info(randomFidelityCard.getProductHistory().size() + " purchase(s) made by this customer!");
