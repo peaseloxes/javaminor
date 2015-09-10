@@ -1,9 +1,11 @@
-package e20150907.fiche.logic;
+package e20150907.fiche.domain.concrete.transactions;
 
 import e20150907.fiche.domain.abs.PaymentItem;
 import e20150907.fiche.domain.abs.ScanItem;
+import e20150907.fiche.domain.abs.Transaction;
 import e20150907.fiche.domain.concrete.Basket;
 import e20150907.fiche.domain.concrete.Bill;
+import e20150907.fiche.logic.ScanItemRepository;
 import e20150907.fiche.util.PreferenceUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +18,7 @@ import java.util.Map;
 /**
  * Created by alex on 9/8/15.
  */
-public class Sale {
+public class Sale extends Transaction{
     private static Logger logger = LogManager.getLogger(Sale.class.getName());
     private Basket basket;
     private Bill bill;
@@ -42,6 +44,7 @@ public class Sale {
         totalPricesCategoriesRemaining = new ArrayList<Double>();
     }
 
+    @Override
     public boolean handleCode(final String code){
         ScanItem item = repository.getItemByCode(code);
         if(item != null){
@@ -52,15 +55,15 @@ public class Sale {
         return false;
     }
 
-    public void closeSale(){
-        calculateBasketContents();
+    public void close(){
+        calculate();
         logger.info("Total price: " + totalPrice);
         for (int i = 0; i < totalPricesCategories.size(); i++) {
             logger.info("Price " + pricingCategories[i] + ": " + totalPricesCategories.get(i));
         }
     }
-
-    private void calculateBasketContents(){
+    @Override
+    public void calculate(){
         totalPrice = basket.calculateTotalPrice();
         totalRemaining += totalPrice;
         for (String pricingCategory : pricingCategories) {
@@ -115,6 +118,8 @@ public class Sale {
     }
 
     public void finish(final boolean print){
+        // TODO properties file
+        bill.setDescription("Bill of Sale");
         bill.setScanItemsMap(basket.getScannedItems());
         bill.setTotalPrice(totalPrice);
 

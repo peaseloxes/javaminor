@@ -27,6 +27,7 @@ public class Bill {
     private Discount discount;
     private Double totalPrice;
     private Map<String,Double> totalCategoryPrices;
+    private String description;
 
     public Bill(){
         scanItemsMap = new HashMap<ScanItem, Integer>();
@@ -50,16 +51,23 @@ public class Bill {
      * Print the bill to the logger.
      */
     public void print(){
+        logger.info("");
+        logger.info(description);
         for (ScanItem k : scanItemsMap.keySet()) {
             logger.info(k.toString() + " X " +scanItemsMap.get(k));
         }
         logger.info("=================================");
         logger.info("Total Price: " + StrUtil.twoDecimal(totalPrice));
-        logger.info(discount.toString()+" Discount: " + StrUtil.twoDecimal(discount.getDiscountOn(totalPrice,1)));
-        logger.info("Categories: ");
-        for(String type : totalCategoryPrices.keySet()){
-            logger.info("\t"+type + ": " + StrUtil.twoDecimal(totalCategoryPrices.get(type)));
+        if(discount!=null) {
+            logger.info(discount.toString() + " Discount: " + StrUtil.twoDecimal(discount.getDiscountOn(totalPrice, 1)));
         }
+        if(totalCategoryPrices!=null){
+            logger.info("Categories: ");
+            for(String type : totalCategoryPrices.keySet()){
+                logger.info("\t"+type + ": " + StrUtil.twoDecimal(totalCategoryPrices.get(type)));
+            }
+        }
+
     }
 
 }

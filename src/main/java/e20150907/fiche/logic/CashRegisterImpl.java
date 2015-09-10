@@ -1,5 +1,7 @@
 package e20150907.fiche.logic;
 
+import e20150907.fiche.domain.concrete.transactions.Return;
+import e20150907.fiche.domain.concrete.transactions.Sale;
 import e20150907.fiche.domain.concrete.paymentitems.Cash;
 import e20150907.fiche.domain.concrete.paymentitems.Digital;
 import e20150907.fiche.domain.concrete.paymentitems.TypeCoupon;
@@ -16,11 +18,16 @@ import java.util.List;
 public class CashRegisterImpl implements CashRegister {
     protected static Logger logger = LogManager.getLogger(CashRegisterImpl.class.getName());
     private Sale sale;
+    private Return returnz;
     private List<Sale> sales;
+    private List<Return> returns;
 
     public CashRegisterImpl(){
         sales = new ArrayList<Sale>();
+        returns = new ArrayList<Return>();
     }
+
+
 
     // TODO possibly warn if previous sale hasn't finished properly yet?
     @Override
@@ -28,7 +35,11 @@ public class CashRegisterImpl implements CashRegister {
         if(sale!=null){
             sales.add(sale);
         }
+        if(returnz!=null){
+            returns.add(returnz);
+        }
         sale = new Sale();
+        returnz = new Return();
     }
 
     /**
@@ -48,7 +59,7 @@ public class CashRegisterImpl implements CashRegister {
     // button on register
     @Override
     public void payWithTypeCoupon(final String type, final double amount){
-        sale.handlePayment(new TypeCoupon(type,amount));
+        sale.handlePayment(new TypeCoupon(type, amount));
     }
 
     // button on register
@@ -58,7 +69,7 @@ public class CashRegisterImpl implements CashRegister {
     }
 
     @Override
-    public void payWithDigital(double amount) {
+    public void payWithDigital(final double amount) {
         sale.handlePayment(new Digital(amount));
     }
 
@@ -67,10 +78,30 @@ public class CashRegisterImpl implements CashRegister {
      */
     @Override
     public void finishUpSale(){
-        sale.closeSale();
+        sale.close();
         // TODO move print decision up to caller
         logger.info("");
         logger.info("");
         sale.finish(true);
+    }
+
+    @Override
+    public void makeReturn(final String code) {
+        returnz.handleCode(code);
+    }
+
+    @Override
+    public void finishUpReturn() {
+        returnz.finishUp();
+    }
+
+    @Override
+    public void openRegister() {
+
+    }
+
+    @Override
+    public void closeRegister() {
+
     }
 }

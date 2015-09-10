@@ -61,5 +61,11 @@ public class Main {
 
         // prove items were saved
         //logger.info(randomFidelityCard.getProductHistory().size() + " purchase(s) made by this customer!");
+
+        register1.startNewSale();
+        register1.makeReturn(randomProducts.get(4).getCodeByType("barcode"));
+        register1.makeReturn(randomProducts.get(4).getCodeByType("barcode"));
+        register1.finishUpReturn();
+
     }
 }
