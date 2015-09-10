@@ -77,7 +77,7 @@ public class Populator {
                 product.setDiscount(new DiscountNone());
             }
 
-            if(NumUtil.fiftyfifty()){
+            if(NumUtil.fiftyFifty()){
                 String randomType = PreferenceUtil.getPricingCategories()[NumUtil.getRandomInt(PreferenceUtil.getPricingCategories().length)];
                 product.addProperties("Type", randomType);
             }else {
@@ -101,10 +101,12 @@ public class Populator {
             customer.setName("Customer_" + i);
 
             FidelityCard fidelityCard = new FidelityCard();
+            fidelityCard.setName("FidelityCard_" + i);
+            // max 20% discount
+            fidelityCard.setDiscount(new DiscountPercentage(NumUtil.getRandomInt(20)));
             fidelityCard.addCode("cardcode", "FC" + getUniqueRandomString());
+
             fidelityCard.setCustomer(customer);
-            // max 50% discount
-            fidelityCard.setDiscount(new DiscountPercentage(NumUtil.getRandomInt(50)));
             fidelityCardList.add(fidelityCard);
         }
     }
@@ -160,8 +162,4 @@ public class Populator {
         return fidelityCardList.get(NumUtil.getRandomInt(fidelityCardList.size()));
     }
 
-    public List<ScanItem> getScanItems() {
-
-        return null;
-    }
 }

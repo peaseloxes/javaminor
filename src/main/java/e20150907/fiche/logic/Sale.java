@@ -9,7 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by alex on 9/8/15.
@@ -52,15 +54,15 @@ public class Sale {
         return false;
     }
 
-    public void finish(){
+    public void closeSale(){
         calculateBasketContents();
-        //bill.print();
         logger.info("Total price: " + totalPrice);
         for (int i = 0; i < totalPricesCategories.size(); i++) {
             logger.info("Price " + pricingCategories[i] + ": " + totalPricesCategories.get(i));
         }
     }
 
+    // TODO fix
     private void calculateBasketContents(){
         totalPrice = basket.calculateTotalPrice();
         totalRemaining += totalPrice;
@@ -86,7 +88,6 @@ public class Sale {
                         double remainder = item.remainder(totalPricesCategories.get(i));
                         totalPricesCategoriesRemaining.add(i, remainder);
 
-                        // TODO not quite right yet
                         if(totalPricesCategories.get(i) > item.getAmount()){
                             totalRemaining -= item.getAmount();
                         }else{
@@ -103,19 +104,30 @@ public class Sale {
             }
         }else{
             // else total price
-            totalRemaining -= item.remainder(totalPrice);
-        }
+            if(item.getAmount()==-1){
+                // paid everything
+                logger.info("Paid " + totalRemaining);
+            }else{
+                // paid partly or too much
+                logger.info("Paid " + item.getAmount());
+                totalRemaining -= item.getAmount();
+                logger.info(totalRemaining + " in total remaining");
+            }
 
+        }
     }
 
-//    public void handlePayment(final PaymentItem item){
-//
-//        // if it's an item with a type
-//        if (item.hasType()){
-//
-//        }
-//
-//        // else, handle as amount
-//        totalRemaining = totalRemaining - item.getAmount();
-//    }
+    public void finish(final boolean print){
+        bill.setScanItemsMap(basket.getScannedItems());
+        bill.setTotalPrice(totalPrice);
+
+        Map<String, Double> map = new HashMap<String, Double>();
+        for (int i = 0; i < totalPricesCategories.size(); i++) {
+            map.put(pricingCategories[i],totalPricesCategories.get(i));
+        }
+        bill.setTotalCategoryPrices(map);
+        if(print){
+            bill.print();
+        }
+    }
 }

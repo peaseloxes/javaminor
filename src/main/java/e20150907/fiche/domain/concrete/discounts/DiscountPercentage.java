@@ -22,6 +22,6 @@ public class DiscountPercentage extends Discount {
 
     @Override
     public String toString(){
-        return StrUtil.twoDecimal(super.discountValue) + "% each";
+        return StrUtil.twoDecimal(super.discountValue) + "% ";
     }
 }

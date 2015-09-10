@@ -1,6 +1,5 @@
 package e20150907.fiche.domain.concrete.scanitems;
 
-import e20150907.fiche.domain.abs.Discount;
 import e20150907.fiche.domain.abs.ScanItem;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +15,6 @@ import java.util.Map;
 @Setter
 public class FidelityCard extends ScanItem{
     private String code;
-    private Discount discount;
     private Customer customer;
     private Map<DateTime, Map<Product,Integer>> productHistory;
 
@@ -33,5 +31,19 @@ public class FidelityCard extends ScanItem{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder b = new StringBuilder();
+        b.append(getName());
+
+        if(hasDiscount()){
+            b.append("\n");
+            b.append("Discount: ");
+            b.append(getDiscount().toString());
+        }
+
+        return b.toString();
     }
 }

@@ -1,9 +1,10 @@
 package e20150907.fiche.domain.concrete;
 
 import e20150907.fiche.domain.abs.Discount;
-import e20150907.fiche.domain.concrete.discounts.DiscountFixedAmount;
+import e20150907.fiche.domain.abs.ScanItem;
 import e20150907.fiche.domain.concrete.scanitems.Customer;
 import e20150907.fiche.domain.concrete.scanitems.Product;
+import e20150907.fiche.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
@@ -19,13 +20,16 @@ import java.util.Map;
 @Setter
 public class Bill {
     private Logger logger = LogManager.getLogger(Bill.class.getName());
-    private Map<Product, Integer> productsMap;
 
+
+    private Map<ScanItem, Integer> scanItemsMap;
     private Customer customer;
-    private Discount discount = new DiscountFixedAmount(100);
+    private Discount discount;
+    private Double totalPrice;
+    private Map<String,Double> totalCategoryPrices;
 
     public Bill(){
-        productsMap = new HashMap<Product, Integer>();
+        scanItemsMap = new HashMap<ScanItem, Integer>();
     }
 
     /**
@@ -35,10 +39,10 @@ public class Bill {
      * @param amount the amount purchased
      */
     public void addProduct(final Product product, final int amount){
-        if(productsMap.containsKey(product)){
-            productsMap.put(product, productsMap.get(product) + amount);
+        if(scanItemsMap.containsKey(product)){
+            scanItemsMap.put(product, scanItemsMap.get(product) + amount);
         }else{
-            productsMap.put(product,amount);
+            scanItemsMap.put(product,amount);
         }
     }
 
@@ -46,10 +50,15 @@ public class Bill {
      * Print the bill to the logger.
      */
     public void print(){
-
-        // TODO fix horror below
-
-
+        for (ScanItem k : scanItemsMap.keySet()) {
+            logger.info(k.toString() + " X " +scanItemsMap.get(k));
+        }
+        logger.info("=================================");
+        logger.info("Total Price: " + StrUtil.twoDecimal(totalPrice));
+        logger.info("Categories: ");
+        for(String type : totalCategoryPrices.keySet()){
+            logger.info("\t"+type + ": " + StrUtil.twoDecimal(totalCategoryPrices.get(type)));
+        }
     }
 
 }

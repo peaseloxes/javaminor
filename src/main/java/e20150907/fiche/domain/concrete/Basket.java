@@ -21,8 +21,18 @@ public class Basket {
 
     public double calculateTotalPrice(){
         double total = 0;
+        double endDiscount = 0;
         for (ScanItem scanItem : scannedItems.keySet()) {
             total+= scanItem.calculatePrice(scannedItems.get(scanItem));
+        }
+        for (ScanItem scanItem : scannedItems.keySet()) {
+            // last end discount counts
+            if (scanItem.calculateEndDiscount(total) > 0){
+                endDiscount = scanItem.calculateEndDiscount(total);
+            }
+        }
+        if(endDiscount!=0){
+            return endDiscount;
         }
         return total;
     }

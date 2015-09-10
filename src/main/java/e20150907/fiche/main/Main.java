@@ -27,43 +27,6 @@ public class Main {
 
         register1.startNewSale();
 
-        // three product 1's
-        register1.scan(randomProducts.get(1).getCodeByType("barcode"));
-        register1.scan(randomProducts.get(1).getCodeByType("barcode"));
-        register1.scan(randomProducts.get(1).getCodeByType("barcode"));
-
-        // product with a custom code
-        register1.scan(randomProducts.get(2).getCodeByType("customcode"));
-
-        // product with a digit code
-        register1.scan(randomProducts.get(3).getCodeByType("digitcode"));
-
-        // another product 1 popped up
-        register1.scan(randomProducts.get(1).getCodeByType("barcode"));
-
-        // scanned a fidelity card (10% discount)
-        register1.scan(randomFidelityCard.getCodeByType("cardcode"));
-
-
-        assert(randomProducts.size()>5);
-        //TODO index out of bounds sometimes?
-        // one last product, 4
-        register1.scan(randomProducts.get(4).getCodeByType("barcode"));
-
-
-        // do the finishing up
-        register1.finishUpSale();
-
-        // prove items were saved
-        //logger.info(randomFidelityCard.getProductHistory().size() + " purchase(s) made by this customer!");
-
-        logger.info("");
-        logger.info("");
-
-        // same customer going for another round
-
-        register1.startNewSale();
-
         // eight product 1's
         register1.scan(randomProducts.get(1).getCodeByType("barcode"));
         register1.scan(randomProducts.get(1).getCodeByType("barcode"));
@@ -95,6 +58,7 @@ public class Main {
         register1.finishUpSale();
 
         register1.payWithTypeCoupon(PreferenceUtil.getPricingCategories()[NumUtil.getRandomInt(PreferenceUtil.getPricingCategories().length)], 100);
+        register1.payWithDigital(-1);
 
         // prove items were saved
         //logger.info(randomFidelityCard.getProductHistory().size() + " purchase(s) made by this customer!");

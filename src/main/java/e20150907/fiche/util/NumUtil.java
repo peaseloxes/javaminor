@@ -11,7 +11,6 @@ public class NumUtil {
         return r.nextInt(max);
     }
 
-
     public static double getRandomDouble(final int max) {
         Random r = new Random();
         double decimals = (r.nextDouble()*10)-0.01;
@@ -19,7 +18,7 @@ public class NumUtil {
         return decimals + num;
     }
 
-    public static boolean fiftyfifty(){
+    public static boolean fiftyFifty(){
         Random r = new Random();
         return r.nextBoolean();
     }

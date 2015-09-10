@@ -1,6 +1,7 @@
 package e20150907.fiche.domain.concrete.scanitems;
 
 import e20150907.fiche.domain.abs.ScanItem;
+import e20150907.fiche.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,14 +27,15 @@ public class Product extends ScanItem{
     public String toString(){
         StringBuilder b = new StringBuilder();
         b.append(getName());
-        b.append(" ");
-        b.append(price);
-        b.append("\n");
+        b.append(" @ ");
+        b.append(StrUtil.twoDecimal(price));
+
         if(hasDiscount()){
+            b.append("\n");
             b.append("Discount: ");
             b.append(getDiscount().toString());
-            b.append(" ");
-            b.append(getPrice());
+            b.append(" New price: ");
+            b.append(StrUtil.twoDecimal(getDiscount().getDiscountOn(getPrice(),1)));
             b.append("\n");
         }
 
