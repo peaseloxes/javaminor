@@ -55,6 +55,7 @@ public class Bill {
         }
         logger.info("=================================");
         logger.info("Total Price: " + StrUtil.twoDecimal(totalPrice));
+        logger.info(discount.toString()+" Discount: " + StrUtil.twoDecimal(discount.getDiscountOn(totalPrice,1)));
         logger.info("Categories: ");
         for(String type : totalCategoryPrices.keySet()){
             logger.info("\t"+type + ": " + StrUtil.twoDecimal(totalCategoryPrices.get(type)));

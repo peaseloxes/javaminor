@@ -32,8 +32,6 @@ public class Sale {
     private List<Double> totalPricesCategories;
     private List<Double> totalPricesCategoriesRemaining;
 
-
-
     public Sale(){
         repository = new ScanItemRepository();
         bill = new Bill();
@@ -62,7 +60,6 @@ public class Sale {
         }
     }
 
-    // TODO fix
     private void calculateBasketContents(){
         totalPrice = basket.calculateTotalPrice();
         totalRemaining += totalPrice;
@@ -126,6 +123,7 @@ public class Sale {
             map.put(pricingCategories[i],totalPricesCategories.get(i));
         }
         bill.setTotalCategoryPrices(map);
+        bill.setDiscount(basket.getEndDiscount());
         if(print){
             bill.print();
         }

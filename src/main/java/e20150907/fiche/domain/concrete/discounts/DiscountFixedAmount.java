@@ -21,7 +21,7 @@ public class DiscountFixedAmount extends Discount {
         if(super.discountValue > price){
             log.info("Discount is larger than total price!");
         }
-        return price - super.discountValue;
+        return (price - super.discountValue)*amount;
     }
 
     @Override

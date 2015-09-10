@@ -27,6 +27,9 @@ public class Product extends ScanItem{
     public String toString(){
         StringBuilder b = new StringBuilder();
         b.append(getName());
+        if(hasProperty("Type")){
+            b.append(" (" + getProperty("Type") + ")");
+        }
         b.append(" @ ");
         b.append(StrUtil.twoDecimal(price));
 

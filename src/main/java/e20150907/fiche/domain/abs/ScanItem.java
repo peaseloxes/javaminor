@@ -95,4 +95,5 @@ public abstract class ScanItem {
         }
         return discount.getDiscountOn(price,1);
     }
+
 }

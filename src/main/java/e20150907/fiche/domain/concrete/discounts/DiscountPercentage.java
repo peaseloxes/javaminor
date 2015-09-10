@@ -17,7 +17,7 @@ public class DiscountPercentage extends Discount {
 
     @Override
     public double getDiscountOn(final double price, int amount) {
-        return price * ((100-discountValue)/100);
+        return (price * amount) * ((100-discountValue)/100);
     }
 
     @Override
