@@ -23,6 +23,8 @@ public class CashRegisterImpl implements CashRegister {
     private List<Transaction> sales;
     private List<Transaction> returns;
 
+    // TODO clean up mess, make all actions similar (Reservation/Return/Sale)
+
     public CashRegisterImpl(){
         sales = new ArrayList<>();
         returns = new ArrayList<>();
@@ -92,7 +94,18 @@ public class CashRegisterImpl implements CashRegister {
     }
 
     @Override
+    public void makeReservation(final List<String> codes){
+        // TODO implement
+    }
+
+    @Override
+    public void finishUpReservation() {
+        // TODO implement
+    }
+
+    @Override
     public void finishUpReturn() {
+        returnz.closeTransaction();
         returnz.finishTransaction(true);
     }
 

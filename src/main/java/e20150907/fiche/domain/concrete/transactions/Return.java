@@ -17,6 +17,7 @@ public class Return extends Transaction{
     // TODO in combination with fidelity card, did customer actually buy? how much did they buy it for?
 
     private static Logger logger = LogManager.getLogger(Return.class.getName());
+
     private Basket basket;
     private Bill bill;
     private ScanItemRepository repository;
@@ -41,17 +42,12 @@ public class Return extends Transaction{
 
     @Override
     public boolean handlePayment(final PaymentItem item) {
+        logger.info("No need to handle customer payment in case of a return.");
         return false;
     }
 
     @Override
     public void finishTransaction(final boolean print) {
-        calculate();
-        // TODO properties file
-        bill.setDescription("Bill of Return");
-
-        bill.setScanItemsMap(basket.getScannedItems());
-        bill.setTotalPrice(totalPrice);
         bill.print();
     }
 
@@ -62,6 +58,11 @@ public class Return extends Transaction{
 
     @Override
     public void closeTransaction() {
+        calculate();
+        // TODO properties file
+        bill.setDescription("Bill of Return");
 
+        bill.setScanItemsMap(basket.getScannedItems());
+        bill.setTotalPrice(totalPrice);
     }
 }

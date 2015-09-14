@@ -27,6 +27,8 @@ public class Sale extends Transaction{
     private double totalPrice;
     private double totalRemaining;
 
+    // TODO clean up mess below
+
     // TODO make dynamic, properties file etc.
     private String categoryPricingName = "Type";
     private String[] pricingCategories = PreferenceUtil.getPricingCategories();
