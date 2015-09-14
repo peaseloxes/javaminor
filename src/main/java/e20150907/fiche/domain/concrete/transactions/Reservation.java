@@ -1,5 +1,6 @@
 package e20150907.fiche.domain.concrete.transactions;
 
+import e20150907.fiche.domain.abs.PaymentItem;
 import e20150907.fiche.domain.abs.Transaction;
 
 /**
@@ -13,7 +14,22 @@ public class Reservation extends Transaction {
     }
 
     @Override
+    public boolean handlePayment(PaymentItem item) {
+        return false;
+    }
+
+    @Override
     public void calculate() {
+
+    }
+
+    @Override
+    public void closeTransaction() {
+
+    }
+
+    @Override
+    public void finishTransaction(boolean print) {
 
     }
 }

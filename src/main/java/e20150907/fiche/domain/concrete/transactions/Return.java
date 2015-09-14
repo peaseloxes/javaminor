@@ -1,5 +1,6 @@
 package e20150907.fiche.domain.concrete.transactions;
 
+import e20150907.fiche.domain.abs.PaymentItem;
 import e20150907.fiche.domain.abs.ScanItem;
 import e20150907.fiche.domain.abs.Transaction;
 import e20150907.fiche.domain.concrete.Basket;
@@ -14,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 public class Return extends Transaction{
 
     // TODO in combination with fidelity card, did customer actually buy? how much did they buy it for?
-    // TODO merge with sale and Reservation
 
     private static Logger logger = LogManager.getLogger(Return.class.getName());
     private Basket basket;
@@ -39,7 +39,13 @@ public class Return extends Transaction{
         return false;
     }
 
-    public void finishUp() {
+    @Override
+    public boolean handlePayment(final PaymentItem item) {
+        return false;
+    }
+
+    @Override
+    public void finishTransaction(final boolean print) {
         calculate();
         // TODO properties file
         bill.setDescription("Bill of Return");
@@ -52,5 +58,10 @@ public class Return extends Transaction{
     @Override
     public void calculate(){
         totalPrice = basket.calculateTotalPrice() * -1;
+    }
+
+    @Override
+    public void closeTransaction() {
+
     }
 }

@@ -63,6 +63,9 @@ public class Basket {
                 total += v;
             }
         }
+        if(endDiscount==null){
+            return total;
+        }
         return endDiscount.getDiscountOn(total,1);
     }
 }

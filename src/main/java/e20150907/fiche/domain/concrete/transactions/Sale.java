@@ -55,13 +55,15 @@ public class Sale extends Transaction{
         return false;
     }
 
-    public void close(){
+    @Override
+    public void closeTransaction(){
         calculate();
         logger.info("Total price: " + totalPrice);
         for (int i = 0; i < totalPricesCategories.size(); i++) {
             logger.info("Price " + pricingCategories[i] + ": " + totalPricesCategories.get(i));
         }
     }
+
     @Override
     public void calculate(){
         totalPrice = basket.calculateTotalPrice();
@@ -73,7 +75,12 @@ public class Sale extends Transaction{
         }
     }
 
-    public void handlePayment(final PaymentItem item) {
+    @Override
+    public boolean handlePayment(final PaymentItem item) {
+
+        if(item==null){
+            return false;
+        }
 
         // if item has a type requirement
         if (item.hasType()){
@@ -115,9 +122,12 @@ public class Sale extends Transaction{
             }
 
         }
+
+        return true;
     }
 
-    public void finish(final boolean print){
+    @Override
+    public void finishTransaction(final boolean print){
         // TODO properties file
         bill.setDescription("Bill of Sale");
         bill.setScanItemsMap(basket.getScannedItems());

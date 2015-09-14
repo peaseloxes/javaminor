@@ -1,5 +1,6 @@
 package e20150907.fiche.logic;
 
+import e20150907.fiche.domain.abs.Transaction;
 import e20150907.fiche.domain.concrete.transactions.Return;
 import e20150907.fiche.domain.concrete.transactions.Sale;
 import e20150907.fiche.domain.concrete.paymentitems.Cash;
@@ -17,14 +18,14 @@ import java.util.List;
  */
 public class CashRegisterImpl implements CashRegister {
     protected static Logger logger = LogManager.getLogger(CashRegisterImpl.class.getName());
-    private Sale sale;
-    private Return returnz;
-    private List<Sale> sales;
-    private List<Return> returns;
+    private Transaction sale;
+    private Transaction returnz;
+    private List<Transaction> sales;
+    private List<Transaction> returns;
 
     public CashRegisterImpl(){
-        sales = new ArrayList<Sale>();
-        returns = new ArrayList<Return>();
+        sales = new ArrayList<>();
+        returns = new ArrayList<>();
     }
 
 
@@ -78,11 +79,11 @@ public class CashRegisterImpl implements CashRegister {
      */
     @Override
     public void finishUpSale(){
-        sale.close();
+        sale.closeTransaction();
         // TODO move print decision up to caller
         logger.info("");
         logger.info("");
-        sale.finish(true);
+        sale.finishTransaction(true);
     }
 
     @Override
@@ -92,7 +93,7 @@ public class CashRegisterImpl implements CashRegister {
 
     @Override
     public void finishUpReturn() {
-        returnz.finishUp();
+        returnz.finishTransaction(true);
     }
 
     @Override
