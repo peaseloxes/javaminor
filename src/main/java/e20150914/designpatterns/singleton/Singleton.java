@@ -6,12 +6,17 @@ package e20150914.designpatterns.singleton;
 public enum Singleton {
     SINGLE;
 
-    private Single instance;
+    private Single single;
 
-    public Single getInstance(){
-        if(instance==null){
-            instance = new Single();
-        }
-        return instance;
+    Singleton(){
+        this.single = new Single();
+    }
+
+    public static Singleton getInstance(){
+        return SINGLE;
+    }
+
+    public Single getSingle(){
+        return single;
     }
 }
