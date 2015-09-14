@@ -1,9 +1,6 @@
 package e20150914.designpatterns.creational.builder.logic;
 
-import e20150914.designpatterns.creational.builder.domain.abs.FoodItem;
 import e20150914.designpatterns.creational.builder.domain.abs.Meal;
-import e20150914.designpatterns.creational.builder.domain.abs.fooditems.Burger;
-import e20150914.designpatterns.creational.builder.domain.abs.fooditems.Drink;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -19,78 +16,29 @@ public class MealBuilderTest extends TestCase {
     public void testBuilder(){
         List<Meal> meals = new ArrayList<>();
 
-        Meal vegiMealPepsi = new MealBuilder().createVegiMealPepsi();
+        Meal vegiMealPepsi = new MealDirector().createVegiMealPepsi(2);
         meals.add(vegiMealPepsi);
 
-        Meal vegiMealCoke = new MealBuilder().createVegiMealCoke();
+        Meal vegiMealCoke = new MealDirector().createVegiMealCoke(2);
         meals.add(vegiMealCoke);
 
-        Meal mealPepsi = new MealBuilder().createMealPepsi();
+        Meal mealPepsi = new MealDirector().createMealPepsi(2);
         meals.add(mealPepsi);
 
-        Meal mealCoke = new MealBuilder().createMealCoke();
+        Meal mealCoke = new MealDirector().createMealCoke(2);
         meals.add(mealCoke);
 
         for (Meal meal : meals) {
             assertNotNull(meal);
-            assertEquals(2, meal.getItems().size());
+            assertEquals(2, meal.getDrinks().size());
+            assertEquals(2, meal.getFood().size());
         }
 
-        float total = 0;
-        for (FoodItem item : vegiMealPepsi.getItems()) {
-            if(item instanceof Burger){
-                assertEquals("Vegi Burger",item.getName());
-                total+=item.getPrice();
-            }else if(item instanceof Drink){
-                assertEquals("Pepsi",item.getName());
-                total+=item.getPrice();
-            }else{
-                fail("No burgers or drinks found!");
-            }
-        }
-        assertEquals(3.60f,total);
+        assertEquals(7.20f,vegiMealPepsi.getCost()); // 2.50 * 2 & 1.10 * 2
+        assertEquals(7.00f,vegiMealCoke.getCost()); // 2.50 * 2 & 1.00 * 2
+        assertEquals(5.20f,mealPepsi.getCost()); // 1.50 * 2 & 1.10 * 2
+        assertEquals(5.00f,mealCoke.getCost()); // 1.50 * 2 & 1.00 * 2
 
-        total = 0;
-        for (FoodItem item : vegiMealCoke.getItems()) {
-            if(item instanceof Burger){
-                assertEquals("Vegi Burger",item.getName());
-                total+=item.getPrice();
-            }else if(item instanceof Drink){
-                assertEquals("Coke",item.getName());
-                total+=item.getPrice();
-            }else{
-                fail("No burgers or drinks found!");
-            }
-        }
-        assertEquals(3.50f,total);
-
-        total = 0;
-        for (FoodItem item : mealCoke.getItems()) {
-            if(item instanceof Burger){
-                assertEquals("Chicken Burger",item.getName());
-                total+=item.getPrice();
-            }else if(item instanceof Drink){
-                assertEquals("Coke",item.getName());
-                total+=item.getPrice();
-            }else{
-                fail("No burgers or drinks found!");
-            }
-        }
-        assertEquals(2.50f,total);
-
-        total = 0;
-        for (FoodItem item : mealPepsi.getItems()) {
-            if(item instanceof Burger){
-                assertEquals("Chicken Burger",item.getName());
-                total+=item.getPrice();
-            }else if(item instanceof Drink){
-                assertEquals("Pepsi",item.getName());
-                total+=item.getPrice();
-            }else{
-                fail("No burgers or drinks found!");
-            }
-        }
-        assertEquals(2.60f,total);
     }
 
 }

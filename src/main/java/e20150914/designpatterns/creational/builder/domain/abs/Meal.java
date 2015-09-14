@@ -12,14 +12,33 @@ import java.util.List;
 @Getter
 @Setter
 public class Meal {
-    private List<FoodItem> items;
+    private List<FoodItem> food;
+    private List<FoodItem> drinks;
 
     public Meal(){
-        items = new ArrayList<>();
+        food = new ArrayList<>();
+        drinks = new ArrayList<>();
     }
 
-    public void addItem(final FoodItem item){
-        items.add(item);
+    public void addFood(final FoodItem item){
+        food.add(item);
+    }
+
+    public void addDrink(final FoodItem item){
+        drinks.add(item);
+    }
+
+    public float getCost(){
+        float total = 0;
+        for (FoodItem item : food) {
+            total+=item.getPrice();
+        }
+
+        for (FoodItem item : drinks) {
+            total+=item.getPrice();
+        }
+
+        return total;
     }
 
 }
