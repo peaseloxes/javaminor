@@ -1,6 +1,6 @@
-package e20150914.designpatterns.behavioral.domain.concrete.expressions;
+package e20150914.designpatterns.behavioral.interpreter.domain.concrete.expressions;
 
-import e20150914.designpatterns.behavioral.domain.abs.Expression;
+import e20150914.designpatterns.behavioral.interpreter.domain.abs.Expression;
 
 /**
  * Created by alex on 9/14/15.

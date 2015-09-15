@@ -1,4 +1,4 @@
-package e20150914.designpatterns.behavioral.domain.abs;
+package e20150914.designpatterns.behavioral.interpreter.domain.abs;
 
 /**
  * Created by alex on 9/14/15.
