@@ -1,11 +1,8 @@
 package e20150907.fiche.domain.concrete.transactions;
 
 import e20150907.fiche.domain.abs.PaymentItem;
-import e20150907.fiche.domain.abs.ScanItem;
 import e20150907.fiche.domain.abs.Transaction;
-import e20150907.fiche.domain.concrete.Basket;
 import e20150907.fiche.domain.concrete.Bill;
-import e20150907.fiche.logic.ScanItemRepository;
 import e20150907.fiche.util.PreferenceUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,12 +17,6 @@ import java.util.Map;
  */
 public class Sale extends Transaction{
     private static Logger logger = LogManager.getLogger(Sale.class.getName());
-    private Basket basket;
-    private Bill bill;
-    private ScanItemRepository repository;
-
-    private double totalPrice;
-    private double totalRemaining;
 
     // TODO clean up mess below
 
@@ -37,45 +28,20 @@ public class Sale extends Transaction{
     private List<Double> totalPricesCategoriesRemaining;
 
     public Sale(){
-        repository = new ScanItemRepository();
-        bill = new Bill();
-        basket = new Basket();
-        totalPrice = 0;
-        totalRemaining = 0;
-        totalPricesCategories = new ArrayList<Double>();
-        totalPricesCategoriesRemaining = new ArrayList<Double>();
+        super();
+        totalPricesCategories = new ArrayList<>();
+        totalPricesCategoriesRemaining = new ArrayList<>();
     }
 
     @Override
     public boolean handleCode(final String code){
-        ScanItem item = repository.getItemByCode(code);
-        if(item != null){
-            basket.addToBasket(item);
+        if(addItemToBasket(code)){
             return true;
         }
         logger.error("The code:    " + code + "    can not be recognized.");
         return false;
     }
 
-    @Override
-    public void closeTransaction(){
-        calculate();
-        logger.info("Total price: " + totalPrice);
-        for (int i = 0; i < totalPricesCategories.size(); i++) {
-            logger.info("Price " + pricingCategories[i] + ": " + totalPricesCategories.get(i));
-        }
-    }
-
-    @Override
-    public void calculate(){
-        totalPrice = basket.calculateTotalPrice();
-        totalRemaining += totalPrice;
-        for (String pricingCategory : pricingCategories) {
-            double r = basket.calculatePriceForItemsWithProperty(categoryPricingName, pricingCategory);
-            totalPricesCategories.add(r);
-            totalPricesCategoriesRemaining.add(r);
-        }
-    }
 
     @Override
     public boolean handlePayment(final PaymentItem item) {
@@ -98,14 +64,14 @@ public class Sale extends Transaction{
                         totalPricesCategoriesRemaining.add(i, remainder);
 
                         if(totalPricesCategories.get(i) > item.getAmount()){
-                            totalRemaining -= item.getAmount();
+                            setTotalPriceRemaining(getTotalPriceRemaining() - item.getAmount());
                         }else{
-                            totalRemaining -= (totalPricesCategories.get(i));
+                            setTotalPriceRemaining(getTotalPriceRemaining() -totalPricesCategories.get(i));
                         }
 
                         logger.info("Paid " + item.getAmount() + " with a " + item.getType() + " coupon");
                         logger.info(totalPricesCategoriesRemaining.get(i) + " of " + item.getType() + " remaining");
-                        logger.info(totalRemaining + " in total remaining");
+                        logger.info(getTotalPriceRemaining() + " in total remaining");
                     }
 
 
@@ -115,12 +81,12 @@ public class Sale extends Transaction{
             // else total price
             if(item.getAmount()==-1){
                 // paid everything
-                logger.info("Paid " + totalRemaining);
+                logger.info("Paid " + getTotalPriceRemaining());
             }else{
                 // paid partly or too much
                 logger.info("Paid " + item.getAmount());
-                totalRemaining -= item.getAmount();
-                logger.info(totalRemaining + " in total remaining");
+                setTotalPriceRemaining(getTotalPriceRemaining() - item.getAmount());
+                logger.info(getTotalPriceRemaining() + " in total remaining");
             }
 
         }
@@ -128,19 +94,44 @@ public class Sale extends Transaction{
         return true;
     }
 
+
+
+    @Override
+    public void closeTransaction(){
+        calculate();
+        logger.info("Total price: " + getTotalPrice());
+        for (int i = 0; i < totalPricesCategories.size(); i++) {
+            logger.info("Price " + pricingCategories[i] + ": " + totalPricesCategories.get(i));
+        }
+    }
+
+    @Override
+    public void calculate(){
+        setTotalPrice(getBasket().calculateTotalPrice());
+        setTotalPriceRemaining(getTotalPrice());
+        for (String pricingCategory : pricingCategories) {
+            double r = getBasket().calculatePriceForItemsWithProperty(categoryPricingName, pricingCategory);
+            totalPricesCategories.add(r);
+            totalPricesCategoriesRemaining.add(r);
+        }
+    }
+
+
+
     @Override
     public void finishTransaction(final boolean print){
+        Bill bill = super.getBill();
         // TODO properties file
         bill.setDescription("Bill of Sale");
-        bill.setScanItemsMap(basket.getScannedItems());
-        bill.setTotalPrice(totalPrice);
+        bill.setScanItemsMap(getBasket().getScannedItems());
+        bill.setTotalPrice(getTotalPrice());
 
         Map<String, Double> map = new HashMap<String, Double>();
         for (int i = 0; i < totalPricesCategories.size(); i++) {
             map.put(pricingCategories[i],totalPricesCategories.get(i));
         }
         bill.setTotalCategoryPrices(map);
-        bill.setDiscount(basket.getEndDiscount());
+        bill.setDiscount(getBasket().getEndDiscount());
         if(print){
             bill.print();
         }
