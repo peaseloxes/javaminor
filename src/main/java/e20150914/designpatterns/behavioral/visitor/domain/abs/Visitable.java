@@ -5,5 +5,5 @@ package e20150914.designpatterns.behavioral.visitor.domain.abs;
  */
 public interface Visitable {
 
-    void accept(Visitor visitor);
+    void accept(final Visitor visitor);
 }

@@ -1,8 +1,8 @@
 package e20150914.designpatterns.behavioral.visitor.domain.logic;
 
-import e20150914.designpatterns.behavioral.visitor.domain.abs.Visitable;
+import e20150914.designpatterns.behavioral.visitor.domain.abs.Visitor;
 import e20150914.designpatterns.behavioral.visitor.domain.concrete.Car;
-import e20150914.designpatterns.behavioral.visitor.domain.concrete.GarageVisitor;
+import e20150914.designpatterns.behavioral.visitor.domain.concrete.Garage;
 import e20150914.designpatterns.behavioral.visitor.domain.concrete.Motorcycle;
 import lombok.Getter;
 
@@ -17,7 +17,7 @@ public class GarageManager {
     @Getter
     private float totalPrice = 0;
 
-    private List<Visitable> carPark;
+    private List<Visitor> carPark;
 
     public GarageManager(){
         carPark = new ArrayList<>();
@@ -27,10 +27,10 @@ public class GarageManager {
     }
 
     public void startWalking(){
-        GarageVisitor visitor = new GarageVisitor();
-        for (Visitable vehicle : carPark) {
-            vehicle.accept(visitor);
+        Garage garage = new Garage();
+        for (Visitor vehicle : carPark) {
+            garage.accept(vehicle);
         }
-        totalPrice = visitor.getTotalPrice();
+        totalPrice = garage.getTotalPrice();
     }
 }
