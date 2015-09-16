@@ -6,11 +6,8 @@ package e20150914.designpatterns.creational.singleton;
 public enum Singleton {
     SINGLE;
 
-    private Single single;
-
-    Singleton(){
-        this.single = new Single();
-    }
+    // default thread safe
+    private static final Single single = new Single();
 
     public static Singleton getInstance(){
         return SINGLE;

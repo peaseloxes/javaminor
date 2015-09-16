@@ -13,12 +13,10 @@ public class NumObserver  extends Observer {
     }
 
     @Override
-    public void update() {
-        String subjectState = getSubject().getState();
+    public void update(String state) {
         boolean shouldICare = true;
 
-
-        for (char c : subjectState.toCharArray()) {
+        for (char c : state.toCharArray()) {
             if(!Character.isDigit(c)){
                 shouldICare = false;
                 break;
@@ -26,7 +24,7 @@ public class NumObserver  extends Observer {
         }
 
         if(shouldICare){
-            setLastState(getSubject().getState());
+            setLastState(state);
         }
     }
 }

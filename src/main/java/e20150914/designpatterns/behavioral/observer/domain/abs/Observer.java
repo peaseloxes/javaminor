@@ -18,5 +18,5 @@ public abstract class Observer {
     @Setter
     private Subject subject;
 
-    public abstract void update();
+    public abstract void update(String state);
 }
