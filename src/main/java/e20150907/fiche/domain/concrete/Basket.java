@@ -1,13 +1,17 @@
 package e20150907.fiche.domain.concrete;
 
+import e20150907.fiche.domain.abs.Criteria;
 import e20150907.fiche.domain.abs.Discount;
 import e20150907.fiche.domain.abs.ScanItem;
+import e20150907.fiche.domain.concrete.criteria.specific.ProductTypeCriteria;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,55 +21,77 @@ import java.util.Map;
 @Setter
 public class Basket {
     private static Logger logger = LogManager.getLogger(Basket.class.getName());
-    private Map<ScanItem,Integer> scannedItems;
+    private Map<ScanItem, Integer> scannedItems;
     private Discount endDiscount;
-    public Basket(){
-        scannedItems = new HashMap<ScanItem,Integer>();
+
+    public Basket() {
+        scannedItems = new HashMap<ScanItem, Integer>();
     }
 
-    public double calculateTotalPrice(){
+    public double calculateTotalPrice() {
         double total = 0;
-        double discount = 0;
+
         for (ScanItem scanItem : scannedItems.keySet()) {
-            total+= scanItem.calculatePrice(scannedItems.get(scanItem));
-        }
-        for (ScanItem scanItem : scannedItems.keySet()) {
+
+            total += scanItem.calculatePrice(scannedItems.get(scanItem));
 
             // if the scan item offers a discount
-            if (scanItem.calculateEndDiscount(total) > 0){
-
-                // last end discount counts
-                discount = scanItem.calculateEndDiscount(total);
+            if (scanItem.isEndDiscountItem()) {
                 endDiscount = scanItem.getDiscount();
             }
         }
-        if(discount!=0){
-            return discount;
+
+        if (endDiscount != null & total > 0) {
+            return endDiscount.getDiscountOn(total, 1);
         }
         return total;
     }
 
-    public boolean addToBasket(final ScanItem item){
-        if(scannedItems.containsKey(item)){
+    public boolean addToBasket(final ScanItem item) {
+        if (scannedItems.containsKey(item)) {
             scannedItems.put(item, scannedItems.get(item) + 1);
-        }else{
-            scannedItems.put(item,1);
+        } else {
+            scannedItems.put(item, 1);
         }
         return true;
     }
 
-    public double calculatePriceForItemsWithProperty(final String property, final String value){
+    /**
+     * Use {@link #calculatePriceForPropertyType(String)} instead
+     *
+     * @param property
+     * @param value
+     * @return
+     */
+    @Deprecated
+    public double calculatePriceForItemsWithProperty(final String property, final String value) {
         double total = 0;
         for (ScanItem scanItem : scannedItems.keySet()) {
-            if(scanItem.hasProperty(property) && scanItem.getProperty(property).equals(value)){
+            if (scanItem.hasProperty(property) && scanItem.getProperty(property).equals(value)) {
                 int amount = scannedItems.get(scanItem);
                 double v = scanItem.calculatePrice(amount);
                 total += v;
             }
         }
-        if(endDiscount==null){
+        if (endDiscount == null) {
             return total;
         }
-        return endDiscount.getDiscountOn(total,1);
+        return endDiscount.getDiscountOn(total, 1);
+    }
+
+    public double calculatePriceForPropertyType(final String value) {
+        ScanItem[] items = new ScanItem[scannedItems.size()];
+        scannedItems.keySet().toArray(items);
+
+        Criteria productType = new ProductTypeCriteria(value);
+        List<ScanItem> matchingItems = productType.meetCriteria(Arrays.asList(items));
+
+        double total = 0;
+        for (ScanItem matchingItem : matchingItems) {
+            final int amount = scannedItems.get(matchingItem);
+            total += matchingItem.calculatePrice(amount);
+        }
+
+        return total;
     }
 }

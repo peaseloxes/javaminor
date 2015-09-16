@@ -21,7 +21,7 @@ public class Sale extends Transaction{
     // TODO clean up mess below
 
     // TODO make dynamic, properties file etc.
-    private String categoryPricingName = "Type";
+    private String categoryPricingName = PreferenceUtil.getCATEGORY_KEY_NAME();
     private String[] pricingCategories = PreferenceUtil.getPRICING_CATEGORIES();
 
     private List<Double> totalPricesCategories;
@@ -41,7 +41,6 @@ public class Sale extends Transaction{
         logger.error("The code:    " + code + "    can not be recognized.");
         return false;
     }
-
 
     @Override
     public boolean handlePayment(final PaymentItem item) {
@@ -94,8 +93,6 @@ public class Sale extends Transaction{
         return true;
     }
 
-
-
     @Override
     public void closeTransaction(){
         calculate();
@@ -115,8 +112,6 @@ public class Sale extends Transaction{
             totalPricesCategoriesRemaining.add(r);
         }
     }
-
-
 
     @Override
     public void finishTransaction(final boolean print){
