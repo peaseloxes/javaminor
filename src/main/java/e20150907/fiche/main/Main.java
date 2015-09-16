@@ -56,7 +56,7 @@ public class Main {
         register1.finishUpSale();
 
         // TODO multiple coupon of same type not supported yet
-        register1.payWithTypeCoupon(PreferenceUtil.getPricingCategories()[NumUtil.getRandomInt(PreferenceUtil.getPricingCategories().length)], 100);
+        register1.payWithTypeCoupon(PreferenceUtil.getPRICING_CATEGORIES()[NumUtil.getRandomInt(PreferenceUtil.getPRICING_CATEGORIES().length)], 100);
         register1.payWithDigital(-1);
 
         // prove items were saved

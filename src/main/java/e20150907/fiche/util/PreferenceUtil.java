@@ -9,5 +9,8 @@ public class PreferenceUtil {
     // TODO fix properly
 
     @Getter
-    private static String[] pricingCategories = new String[]{"ECO","Meal"};
+    private static final String[] PRICING_CATEGORIES = new String[]{"ECO","Meal"};
+
+    @Getter
+    private static final String CATEGORY_KEY_NAME = "type";
 }

@@ -43,7 +43,7 @@ public abstract class Transaction {
         priceRemainingPerCategory = new HashMap<>();
 
         // populate
-        for (String category : PreferenceUtil.getPricingCategories()) {
+        for (String category : PreferenceUtil.getPRICING_CATEGORIES()) {
             pricePerCategory.put(category,new Double(0));
             priceRemainingPerCategory.put(category,new Double(0));
         }

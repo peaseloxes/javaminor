@@ -22,7 +22,7 @@ public class Sale extends Transaction{
 
     // TODO make dynamic, properties file etc.
     private String categoryPricingName = "Type";
-    private String[] pricingCategories = PreferenceUtil.getPricingCategories();
+    private String[] pricingCategories = PreferenceUtil.getPRICING_CATEGORIES();
 
     private List<Double> totalPricesCategories;
     private List<Double> totalPricesCategoriesRemaining;
