@@ -54,4 +54,5 @@ public interface CashRegister {
 
     void closeRegister();
 
+    void finishAdding();
 }

@@ -123,20 +123,19 @@ public abstract class Transaction {
     }
 
     // TODO replace calculate
-    protected boolean calculate2(){
+    protected boolean calculate2() {
         totalPrice = basket.calculateTotalPrice();
         totalPriceRemaining = totalPrice;
         for (String type : pricePerCategory.keySet()) {
             double priceForType = basket.calculatePriceForPropertyType(type);
-            pricePerCategory.put(type,priceForType);
-            priceRemainingPerCategory.put(type,priceForType);
+            pricePerCategory.put(type, priceForType);
+            priceRemainingPerCategory.put(type, priceForType);
         }
-
         return true;
     }
 
     //TODO replace finishTransaction
-    protected boolean finishTransaction2(final boolean print){
+    protected boolean finishTransaction2(final boolean print) {
 
         bill.setDescription(PreferenceUtil.BILL_SALE_DESCRIPTION);
         bill.setDiscount(basket.getEndDiscount());
@@ -148,33 +147,35 @@ public abstract class Transaction {
         Map<String, Double> paidPerCategory = new HashMap<>();
 
         for (String type : pricePerCategory.keySet()) {
-            paidPerCategory.put(type,pricePerCategory.get(type) - priceRemainingPerCategory.get(type));
+            paidPerCategory.put(type, pricePerCategory.get(type) - priceRemainingPerCategory.get(type));
         }
 
         bill.setTotalCategoryPaid(paidPerCategory);
-        if(print) {
+        if (print) {
             bill.print();
         }
         return true;
     }
-    
+
     // TODO fix price calculation/payment
     protected final boolean payWithItem(final PaymentItem item) {
         boolean success = false;
-
-        if (item==null){
+        String type = item.getType();
+        if (item == null) {
             return false;
         }
-        if (state != TransactionState.CLOSED & state != TransactionState.PAID) {
+        //if (state != TransactionState.CLOSED & state != TransactionState.PAID) {
             state = TransactionState.PAYING;
-            if(item.hasType()){
+            if (item.hasType()) {
                 // means it's a category specific item
                 success = payPerCategory(item);
-            }else{
+            } else {
                 // means it's a general item
                 success = payNormal(item);
             }
-        }
+       // }else{
+            //logger.error("Transaction not in the correct state, cannot pay.");
+        //}
 
         // if everything was paid, state changes to PAID
         if (totalPriceRemaining <= 0 & success) {
@@ -183,58 +184,61 @@ public abstract class Transaction {
         return success;
     }
 
-    private final boolean payNormal(final PaymentItem item){
-        if(item.getAmount() < -1){
+    private boolean payNormal(final PaymentItem item) {
+        if (item.getAmount() < -1) {
 
             logger.error("Payment value is incorrect: " + item.getAmount());
             return false;
         }
-        if(item.getAmount() == -1){
+        if (item.getAmount() == -1) {
             // shortcut for paying the entire remaining sum
             totalPriceRemaining = 0;
 
             // put category remaining on 0 as well
             for (String type : priceRemainingPerCategory.keySet()) {
-                priceRemainingPerCategory.put(type,0.0);
+                priceRemainingPerCategory.put(type, 0.0);
             }
             return true;
-        }else{
+        } else {
             // might pay with more than is needed, so no capping
             totalPriceRemaining = totalPriceRemaining - item.getAmount();
 
             double remainder = item.getAmount();
 
-            while(remainder > 0){
+            while (remainder > 0) {
                 // bring category remaining down as well
                 for (String type : priceRemainingPerCategory.keySet()) {
-                    remainder = Math.max(0,priceRemainingPerCategory.get(type) - remainder);
-                    priceRemainingPerCategory.put(type,remainder);
+                    remainder = Math.max(0, priceRemainingPerCategory.get(type) - remainder);
+                    priceRemainingPerCategory.put(type, remainder);
                 }
             }
-            return true;
+
         }
+        return true;
     }
 
-    private final boolean payPerCategory(final PaymentItem item){
-        if(!item.hasType()){
+    private boolean payPerCategory(final PaymentItem item) {
+        if (!item.hasType()) {
             // if item has no type, can't do anything
             return false;
         }
 
         String type = item.getType();
 
-        if(!priceRemainingPerCategory.containsKey(type)){
+        if (!priceRemainingPerCategory.containsKey(type)) {
             // if item type is not found in current list of types, can't do anything
             return false;
         }
 
         Double priceRemaining = priceRemainingPerCategory.get(type);
 
+        System.err.println(priceRemaining);
+
         // cannot overpay with a specialty payment item, so capped at 0
-        priceRemaining = new Double(Math.max(0,priceRemaining-item.getAmount()));
+        priceRemaining = new Double(priceRemaining - item.getAmount());
 
         totalPriceRemaining = priceRemaining;
-        priceRemainingPerCategory.put(type,priceRemaining);
+        priceRemainingPerCategory.put(type, priceRemaining);
 
         return true;
     }

@@ -52,6 +52,8 @@ public class Main {
         // one last product, 4
         register1.scan(randomProducts.get(4).getCodeByType("barcode"));
 
+        register1.finishAdding();
+
         // TODO multiple coupon of same type not supported yet
         register1.payWithTypeCoupon(PreferenceUtil.getPRICING_CATEGORIES()[NumUtil.getRandomInt(PreferenceUtil.getPRICING_CATEGORIES().length)], 100);
         register1.payWithDigital(-1);
