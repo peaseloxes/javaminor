@@ -79,7 +79,7 @@ public class Populator {
 
             if(NumUtil.fiftyFifty()){
                 String randomType = PreferenceUtil.getPRICING_CATEGORIES()[NumUtil.getRandomInt(PreferenceUtil.getPRICING_CATEGORIES().length)];
-                product.addProperties("Type", randomType);
+                product.addProperties(PreferenceUtil.getCATEGORY_KEY_NAME(), randomType);
             }else {
                 // otherwise no type property
             }

@@ -122,18 +122,120 @@ public abstract class Transaction {
         return false;
     }
 
+    // TODO replace calculate
+    protected boolean calculate2(){
+        totalPrice = basket.calculateTotalPrice();
+        totalPriceRemaining = totalPrice;
+        for (String type : pricePerCategory.keySet()) {
+            double priceForType = basket.calculatePriceForPropertyType(type);
+            pricePerCategory.put(type,priceForType);
+            priceRemainingPerCategory.put(type,priceForType);
+        }
+
+        return true;
+    }
+
+    //TODO replace finishTransaction
+    protected boolean finishTransaction2(final boolean print){
+
+        bill.setDescription(PreferenceUtil.BILL_SALE_DESCRIPTION);
+        bill.setDiscount(basket.getEndDiscount());
+        bill.setScanItemsMap(basket.getScannedItems());
+        bill.setTotalPrice(totalPrice);
+        bill.setTotalCategoryPrices(pricePerCategory);
+        bill.setTotalPaid(totalPrice - totalPriceRemaining);
+
+        Map<String, Double> paidPerCategory = new HashMap<>();
+
+        for (String type : pricePerCategory.keySet()) {
+            paidPerCategory.put(type,pricePerCategory.get(type) - priceRemainingPerCategory.get(type));
+        }
+
+        bill.setTotalCategoryPaid(paidPerCategory);
+        if(print) {
+            bill.print();
+        }
+        return true;
+    }
+    
+    // TODO fix price calculation/payment
     protected final boolean payWithItem(final PaymentItem item) {
+        boolean success = false;
+
+        if (item==null){
+            return false;
+        }
         if (state != TransactionState.CLOSED & state != TransactionState.PAID) {
             state = TransactionState.PAYING;
-
-            // TODO move implementation from sale to here
-
+            if(item.hasType()){
+                // means it's a category specific item
+                success = payPerCategory(item);
+            }else{
+                // means it's a general item
+                success = payNormal(item);
+            }
         }
 
         // if everything was paid, state changes to PAID
-        if (totalPriceRemaining < 0) {
+        if (totalPriceRemaining <= 0 & success) {
             state = TransactionState.PAID;
         }
-        return false;
+        return success;
+    }
+
+    private final boolean payNormal(final PaymentItem item){
+        if(item.getAmount() < -1){
+
+            logger.error("Payment value is incorrect: " + item.getAmount());
+            return false;
+        }
+        if(item.getAmount() == -1){
+            // shortcut for paying the entire remaining sum
+            totalPriceRemaining = 0;
+
+            // put category remaining on 0 as well
+            for (String type : priceRemainingPerCategory.keySet()) {
+                priceRemainingPerCategory.put(type,0.0);
+            }
+            return true;
+        }else{
+            // might pay with more than is needed, so no capping
+            totalPriceRemaining = totalPriceRemaining - item.getAmount();
+
+            double remainder = item.getAmount();
+
+            while(remainder > 0){
+                // bring category remaining down as well
+                for (String type : priceRemainingPerCategory.keySet()) {
+                    remainder = Math.max(0,priceRemainingPerCategory.get(type) - remainder);
+                    priceRemainingPerCategory.put(type,remainder);
+                }
+            }
+            return true;
+        }
+    }
+
+    private final boolean payPerCategory(final PaymentItem item){
+        if(!item.hasType()){
+            // if item has no type, can't do anything
+            return false;
+        }
+
+        String type = item.getType();
+
+        if(!priceRemainingPerCategory.containsKey(type)){
+            // if item type is not found in current list of types, can't do anything
+            return false;
+        }
+
+        Double priceRemaining = priceRemainingPerCategory.get(type);
+
+        // cannot overpay with a specialty payment item, so capped at 0
+        priceRemaining = new Double(Math.max(0,priceRemaining-item.getAmount()));
+
+        totalPriceRemaining = priceRemaining;
+        priceRemainingPerCategory.put(type,priceRemaining);
+
+        return true;
     }
 }

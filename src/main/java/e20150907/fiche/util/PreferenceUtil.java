@@ -13,4 +13,5 @@ public class PreferenceUtil {
 
     @Getter
     private static final String CATEGORY_KEY_NAME = "type";
+    public static final String BILL_SALE_DESCRIPTION = "========Bill of Sale=======";
 }

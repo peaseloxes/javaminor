@@ -82,6 +82,7 @@ public class CashRegisterImpl implements CashRegister {
     @Override
     public void finishUpSale(){
         sale.closeTransaction();
+        sale.calculate();
         // TODO move print decision up to caller
         logger.info("");
         logger.info("");

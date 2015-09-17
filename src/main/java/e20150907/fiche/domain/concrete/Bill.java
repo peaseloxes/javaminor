@@ -3,7 +3,6 @@ package e20150907.fiche.domain.concrete;
 import e20150907.fiche.domain.abs.Discount;
 import e20150907.fiche.domain.abs.ScanItem;
 import e20150907.fiche.domain.concrete.scanitems.Customer;
-import e20150907.fiche.domain.concrete.scanitems.Product;
 import e20150907.fiche.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,23 +27,11 @@ public class Bill {
     private Double totalPrice;
     private Map<String,Double> totalCategoryPrices;
     private String description;
+    private double totalPaid;
+    private Map<String, Double> totalCategoryPaid;
 
     public Bill(){
         scanItemsMap = new HashMap<ScanItem, Integer>();
-    }
-
-    /**
-     * Add a product to be billed.
-     *
-     * @param product the product to add
-     * @param amount the amount purchased
-     */
-    public void addProduct(final Product product, final int amount){
-        if(scanItemsMap.containsKey(product)){
-            scanItemsMap.put(product, scanItemsMap.get(product) + amount);
-        }else{
-            scanItemsMap.put(product,amount);
-        }
     }
 
     /**
@@ -67,7 +54,14 @@ public class Bill {
                 logger.info("\t"+type + ": " + StrUtil.twoDecimal(totalCategoryPrices.get(type)));
             }
         }
+        logger.info("=================================");
+        logger.info("Total Paid: " + StrUtil.twoDecimal(totalPaid));
+        if(totalCategoryPrices!=null){
+            logger.info("Categories: ");
+            for (String type : totalCategoryPaid.keySet()) {
+                logger.info("\t"+type + ": " + StrUtil.twoDecimal(totalCategoryPaid.get(type)));
+            }
+        }
 
     }
-
 }
